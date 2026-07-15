@@ -198,7 +198,7 @@ async function main() {
   ];
 
   for (const faq of faqs) {
-    await prisma.faq.create({ data: faq }).catch(() => {});
+    await prisma.fAQ.create({ data: faq }).catch(() => {});
   }
   console.log('✅ FAQs seeded.');
 
