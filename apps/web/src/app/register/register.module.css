@@ -1,0 +1,66 @@
+.pageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 128px);
+  padding: var(--space-8) var(--space-4);
+  background-color: var(--color-surface);
+}
+
+.registerCard {
+  width: 100%;
+  max-width: 480px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.nameRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.footer {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-6);
+}
+
+.loginLink {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--weight-medium);
+}
+
+.loginLink:hover {
+  text-decoration: underline;
+}

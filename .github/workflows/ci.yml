@@ -1,0 +1,36 @@
+# ═══════════════════════════════════════════════════════════════
+# NexaStore Monorepo — GitHub Actions Continuous Integration (CI)
+# Automates typechecking, lints, and test checks across workspace PRs
+# ═══════════════════════════════════════════════════════════════
+
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, master, dev ]
+  pull_request:
+    branches: [ main, master, dev ]
+
+jobs:
+  verify:
+    name: Verify Codebase
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Workspace Typecheck
+        run: npm run typecheck
+
+      - name: Workspace Lint
+        run: npm run lint

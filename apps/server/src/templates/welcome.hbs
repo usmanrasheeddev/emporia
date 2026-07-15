@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Welcome to NexaStore</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type="text/css">
+    body, table, td, a { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; width: 100% !important; }
+    .email-container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .header { background: linear-gradient(135deg, #6366f1, #4f46e5); padding: 40px 20px; text-align: center; }
+    .logo { font-size: 28px; font-weight: 800; color: #ffffff; letter-spacing: -1px; text-decoration: none; }
+    .content { padding: 40px 30px; color: #334155; line-height: 1.6; }
+    h1 { font-size: 24px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 16px; }
+    p { margin-bottom: 20px; font-size: 16px; }
+    .btn { display: inline-block; padding: 14px 30px; font-weight: 600; text-decoration: none; color: #ffffff !important; background-color: #4f46e5; border-radius: 8px; font-size: 16px; margin: 20px 0; text-align: center; }
+    .footer { background: #f8fafc; padding: 20px; text-align: center; font-size: 13px; color: #94a3b8; border-top: 1px solid #e2e8f0; }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <a href="{{appUrl}}" class="logo">NexaStore</a>
+    </div>
+    <div class="content">
+      <h1>Hello, {{name}}!</h1>
+      <p>Thank you for creating an account with NexaStore. We are excited to have you join our platform!</p>
+      <p>To get started shopping, please verify your email address by clicking the button below:</p>
+      <div style="text-align: center;">
+        <a href="{{verificationUrl}}" class="btn" target="_blank">Verify Email Address</a>
+      </div>
+      <p>If the button doesn't work, copy and paste this link into your browser:</p>
+      <p style="word-break: break-all; font-size: 14px; color: #6366f1;">{{verificationUrl}}</p>
+      <p>Thank you,<br>The NexaStore Team</p>
+    </div>
+    <div class="footer">
+      &copy; 2026 NexaStore. All rights reserved.<br>
+      If you did not sign up for this account, you can safely ignore this email.
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-4);
+}
+
+.title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-1) 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.filterBar {
+  margin-bottom: var(--space-4);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.filterLabel {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badgeFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.filterBtn {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 4px var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.filterBtn:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.activeFilter {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-primary-text);
+}
+
+.activeFilter:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: var(--color-primary-text);
+}
+
+.loaderWrapper {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-12) 0;
+}
+
+.customerCell {
+  display: flex;
+  flex-direction: column;
+}
+
+.customerEmail {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin-top: 1px;
+}
+
+.statusUpdateWrapper {
+  display: inline-flex;
+}
+
+.statusSelect {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  outline: none;
+}
+
+.statusSelect:focus {
+  border-color: var(--color-primary);
+}
+
+.emptyMsg {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-4);
+}

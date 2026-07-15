@@ -1,0 +1,152 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-4);
+}
+
+.title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-1) 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.metaActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.controlButtons {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.loaderWrapper {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-12) 0;
+}
+
+.chatWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.ticketDescCard {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+.descAuthorRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
+}
+
+.descDate {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.descText {
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+  margin: 0;
+}
+
+.messagesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-height: 480px;
+  overflow-y: auto;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg);
+}
+
+.emptyMsg {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  padding: var(--space-12) 0;
+  margin: 0;
+}
+
+.messageBubble {
+  max-width: 75%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.staffBubble {
+  align-self: flex-end;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.userBubble {
+  align-self: flex-start;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+}
+
+.bubbleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
+  font-size: var(--text-xs);
+}
+
+.senderName {
+  font-weight: var(--weight-semibold);
+}
+
+.bubbleDate {
+  color: var(--color-text-tertiary);
+}
+
+.bubbleText {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+}
+
+.chatForm {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.inputWrapper {
+  flex-grow: 1;
+}

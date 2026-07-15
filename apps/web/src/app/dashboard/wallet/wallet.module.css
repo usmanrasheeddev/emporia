@@ -1,0 +1,130 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-4);
+}
+
+.title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-1) 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .dashboardGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.balanceCard {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.balanceLabel {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+
+.balanceValue {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+
+.balanceHelp {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.topUpCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.cardTitle {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-4) 0;
+}
+
+.topUpForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.inputWrapper {
+  flex-grow: 1;
+}
+
+.ledgerSection {
+  margin-top: var(--space-6);
+}
+
+.ledgerTitle {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-4) 0;
+}
+
+.txCode {
+  background-color: var(--color-surface);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+}
+
+.creditText {
+  color: var(--color-success);
+  font-weight: var(--weight-semibold);
+}
+
+.debitText {
+  color: var(--color-error);
+  font-weight: var(--weight-semibold);
+}
+
+.emptyMsg {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-4);
+}

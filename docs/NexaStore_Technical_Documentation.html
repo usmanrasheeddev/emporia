@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaStore — Enterprise E-Commerce Platform — Technical Documentation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #0ea5e9;
+            --accent: #f43f5e;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg: #0f172a;
+            --bg-card: #1e293b;
+            --bg-code: #0d1117;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 32px; }
+
+        /* Cover Page */
+        .cover {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            padding: 60px 40px;
+            page-break-after: always;
+        }
+        .cover-logo {
+            font-size: 72px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #0ea5e9, #f43f5e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            letter-spacing: -2px;
+        }
+        .cover-subtitle {
+            font-size: 22px;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            font-weight: 300;
+        }
+        .cover-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 700px;
+            margin-top: 40px;
+        }
+        .cover-meta-item {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .cover-meta-item h4 { color: var(--primary); font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+        .cover-meta-item p { font-size: 18px; font-weight: 600; }
+        .cover-badges { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; justify-content: center; }
+        .badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+        .badge-primary { border-color: var(--primary); color: var(--primary); }
+        .badge-success { border-color: var(--success); color: var(--success); }
+        .badge-warning { border-color: var(--warning); color: var(--warning); }
+
+        /* Section Headers */
+        .section { margin-bottom: 48px; page-break-inside: avoid; }
+        h1 { font-size: 36px; font-weight: 800; margin-bottom: 8px; color: #fff; letter-spacing: -1px; }
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary);
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+        h3 { font-size: 20px; font-weight: 600; margin-bottom: 16px; color: var(--secondary); }
+        h4 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+        p { margin-bottom: 12px; }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .icon-purple { background: rgba(99, 102, 241, 0.15); color: var(--primary); }
+        .icon-blue { background: rgba(14, 165, 233, 0.15); color: var(--secondary); }
+        .icon-red { background: rgba(244, 63, 94, 0.15); color: var(--accent); }
+        .icon-green { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .icon-yellow { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 13px;
+        }
+        th {
+            background: var(--bg-card);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        tr:hover td { background: rgba(99, 102, 241, 0.05); }
+
+        /* Code */
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-code);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--secondary);
+        }
+        pre {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* Lists */
+        ul, ol { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 6px; }
+
+        /* Diagrams (ASCII art styling) */
+        .diagram {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .diagram-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Flow boxes */
+        .flow { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin: 24px 0; }
+        .flow-box {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 13px;
+            text-align: center;
+            min-width: 140px;
+        }
+        .flow-arrow { display: flex; align-items: center; color: var(--text-muted); font-size: 24px; }
+        .fb-purple { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: var(--primary); }
+        .fb-blue { background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.3); color: var(--secondary); }
+        .fb-green { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); }
+        .fb-red { background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); color: var(--accent); }
+        .fb-yellow { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: var(--warning); }
+
+        /* Alert boxes */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+        .alert-info { background: rgba(14, 165, 233, 0.1); border-color: var(--secondary); }
+        .alert-warning { background: rgba(245, 158, 11, 0.1); border-color: var(--warning); }
+        .alert-success { background: rgba(16, 185, 129, 0.1); border-color: var(--success); }
+        .alert-danger { background: rgba(244, 63, 94, 0.1); border-color: var(--accent); }
+
+        /* Phase indicator */
+        .phase-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(14, 165, 233, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 24px 32px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .phase-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+        .phase-info h3 { margin-bottom: 4px; color: #fff; font-size: 22px; }
+        .phase-info p { color: var(--text-muted); margin: 0; }
+
+        /* Stats */
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+        .stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value { font-size: 32px; font-weight: 800; color: var(--primary); }
+        .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+        /* ER Diagram */
+        .er-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .er-entity {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .er-entity-header {
+            padding: 10px 16px;
+            font-weight: 600;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+        .er-entity-body { padding: 10px 16px; font-size: 11px; }
+        .er-entity-body div { padding: 2px 0; color: var(--text-muted); }
+        .er-entity-body .pk { color: var(--warning); }
+        .er-entity-body .fk { color: var(--secondary); }
+        .er-header-purple { background: rgba(99, 102, 241, 0.2); color: var(--primary); }
+        .er-header-blue { background: rgba(14, 165, 233, 0.2); color: var(--secondary); }
+        .er-header-green { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .er-header-red { background: rgba(244, 63, 94, 0.2); color: var(--accent); }
+        .er-header-yellow { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 30px; margin: 24px 0; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        .timeline-item { position: relative; margin-bottom: 24px; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid var(--bg);
+        }
+
+        /* Page break */
+        .page-break { page-break-before: always; }
+
+        /* Print styles */
+        @media print {
+            body { background: white; color: #1a1a1a; font-size: 11px; }
+            .container { padding: 20px; }
+            .card { border: 1px solid #ddd; background: #f9f9f9; }
+            .cover { background: white; }
+            .cover-logo { -webkit-text-fill-color: var(--primary); }
+            pre, code { background: #f4f4f4; color: #333; }
+            th { background: #f0f0f0; }
+            td { border-color: #ddd; }
+            .phase-header { background: #f0f0ff; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== COVER PAGE ========== -->
+<div class="cover">
+    <div class="cover-logo">NexaStore</div>
+    <div class="cover-subtitle">Enterprise E-Commerce Platform — Technical Implementation Document</div>
+    <div style="color: var(--text-muted); margin-bottom: 32px;">
+        Version 1.0 &nbsp;|&nbsp; July 2026 &nbsp;|&nbsp; Confidential
+    </div>
+    <div class="cover-meta">
+        <div class="cover-meta-item">
+            <h4>Architecture</h4>
+            <p>Microservice-Ready Monolith</p>
+        </div>
+        <div class="cover-meta-item">
+            <h4>Phases</h4>
+            <p>8 Phases</p>
+        </div>
+        <div class="cover-meta-item">
+            <h4>Scale Target</h4>
+            <p>1M+ Users</p>
+        </div>
+    </div>
+    <div class="cover-badges">
+        <span class="badge badge-primary">Next.js 15</span>
+        <span class="badge badge-primary">React 19</span>
+        <span class="badge badge-primary">TypeScript</span>
+        <span class="badge badge-success">Express.js</span>
+        <span class="badge badge-success">PostgreSQL</span>
+        <span class="badge badge-success">Prisma</span>
+        <span class="badge badge-warning">Redis</span>
+        <span class="badge badge-warning">Stripe</span>
+        <span class="badge badge-warning">Docker</span>
+    </div>
+</div>
+
+<!-- ========== TABLE OF CONTENTS ========== -->
+<div class="container">
+<div class="section">
+    <h2>📑 Table of Contents</h2>
+    <div class="card">
+        <ol style="columns: 2; column-gap: 40px;">
+            <li>System Architecture Overview</li>
+            <li>Tech Stack Details</li>
+            <li>Project Statistics</li>
+            <li>Monorepo Folder Structure</li>
+            <li>Database Schema (ER Diagram)</li>
+            <li>API Architecture</li>
+            <li>Authentication Flow</li>
+            <li>Order State Machine</li>
+            <li>Payment Flow</li>
+            <li>Search Architecture</li>
+            <li>Caching Strategy</li>
+            <li>User Roles & Permissions</li>
+            <li>Phase 1: Foundation & Infrastructure</li>
+            <li>Phase 2: Product Catalog & Search</li>
+            <li>Phase 3: Cart, Checkout & Payments</li>
+            <li>Phase 4: Frontend Foundation</li>
+            <li>Phase 5: Shop Frontend Pages</li>
+            <li>Phase 6: Customer Dashboard</li>
+            <li>Phase 7: Admin Dashboard</li>
+            <li>Phase 8: DevOps, Testing & Polish</li>
+            <li>Environment Variables</li>
+            <li>Deployment Architecture</li>
+            <li>Security Checklist</li>
+            <li>Performance Optimization</li>
+            <li>Development Rules & Standards</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ========== 1. SYSTEM ARCHITECTURE ========== -->
+<div class="section page-break">
+    <h2>1. System Architecture Overview</h2>
+
+    <div class="diagram">
+        <div class="diagram-title">High-Level Architecture Diagram</div>
+        <pre style="text-align: left; border: none; margin: 0; background: transparent;">
+┌─────────────────────────────────────────────────────────────────────┐
+│                         CLIENT LAYER                                │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                    Next.js 15 (Vercel)                        │  │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────────┐│  │
+│  │  │  React   │ │ Tailwind │ │  Shadcn  │ │  Framer + GSAP   ││  │
+│  │  │  Server  │ │   CSS    │ │    UI    │ │   Animations     ││  │
+│  │  │Components│ │          │ │          │ │                  ││  │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────────────┘│  │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────────┐│  │
+│  │  │ Zustand  │ │ TanStack │ │   Zod    │ │ React Hook Form  ││  │
+│  │  │  Store   │ │  Query   │ │Validators│ │                  ││  │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────────────┘│  │
+│  └──────────────────────────┬────────────────────────────────────┘  │
+└─────────────────────────────┼───────────────────────────────────────┘
+                              │ HTTPS / REST
+┌─────────────────────────────▼───────────────────────────────────────┐
+│                         API GATEWAY                                  │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │              Express.js (Railway)                              │  │
+│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────────┐ │  │
+│  │  │Helmet  │ │ CORS   │ │Rate    │ │ Auth   │ │ Validation │ │  │
+│  │  │        │ │        │ │Limiter │ │Middleware│ │ Middleware │ │  │
+│  │  └────────┘ └────────┘ └────────┘ └────────┘ └────────────┘ │  │
+│  └──────────────────────────┬────────────────────────────────────┘  │
+└─────────────────────────────┼───────────────────────────────────────┘
+                              │
+┌─────────────────────────────▼───────────────────────────────────────┐
+│                       SERVICE LAYER                                  │
+│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────┐  │
+│  │  Auth   │ │ Product │ │  Order  │ │ Payment │ │  Inventory  │  │
+│  │ Service │ │ Service │ │ Service │ │ Service │ │   Service   │  │
+│  └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘ └──────┬──────┘  │
+│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────┐  │
+│  │ Search  │ │  Blog   │ │   CMS   │ │Analytics│ │Notification │  │
+│  │ Service │ │ Service │ │ Service │ │ Service │ │   Service   │  │
+│  └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘ └──────┬──────┘  │
+└───────┼──────────┼──────────┼──────────┼─────────────┼──────────────┘
+        │          │          │          │             │
+┌───────▼──────────▼──────────▼──────────▼─────────────▼──────────────┐
+│                     REPOSITORY LAYER                                 │
+│  ┌────────────────────────────────┐  ┌────────────────────────────┐  │
+│  │        Prisma ORM             │  │        Redis Client        │  │
+│  │   (Query Builder + Models)    │  │  (Cache + Sessions + Queue)│  │
+│  └───────────────┬───────────────┘  └─────────────┬──────────────┘  │
+└──────────────────┼────────────────────────────────┼─────────────────┘
+                   │                                │
+┌──────────────────▼────────┐    ┌──────────────────▼─────────────────┐
+│      PostgreSQL           │    │          Redis                      │
+│  ┌──────────────────────┐ │    │  ┌──────────────────────────────┐  │
+│  │  40+ Tables          │ │    │  │  Session Store               │  │
+│  │  Indexes + GIN FTS   │ │    │  │  Cart Cache                  │  │
+│  │  Soft Delete         │ │    │  │  Product Cache                │  │
+│  │  Cascade Relations   │ │    │  │  Search Autocomplete          │  │
+│  │  Audit Triggers      │ │    │  │  Rate Limit Counters          │  │
+│  └──────────────────────┘ │    │  │  Token Blacklist              │  │
+└───────────────────────────┘    │  └──────────────────────────────┘  │
+                                 └────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                     EXTERNAL SERVICES                                │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │
+│  │ Stripe   │ │ PayPal   │ │Cloudinary│ │ Google   │ │ GitHub   │  │
+│  │ Payments │ │ Payments │ │   CDN    │ │ OAuth    │ │ OAuth    │  │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘  │
+│  ┌──────────┐ ┌───────────────────────┐                             │
+│  │Nodemailer│ │  SMTP Email Server    │                             │
+│  │          │ │                       │                             │
+│  └──────────┘ └───────────────────────┘                             │
+└─────────────────────────────────────────────────────────────────────┘
+        </pre>
+    </div>
+</div>
+
+<!-- ========== 2. TECH STACK ========== -->
+<div class="section">
+    <h2>2. Tech Stack Details</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon icon-purple">⚛</div>
+                <h4>Frontend</h4>
+            </div>
+            <ul>
+                <li>Next.js 15 (App Router, RSC)</li>
+                <li>React 19</li>
+                <li>TypeScript 5.x</li>
+                <li>Tailwind CSS v4</li>
+                <li>Shadcn UI</li>
+                <li>Framer Motion</li>
+                <li>GSAP</li>
+                <li>React Hook Form + Zod</li>
+                <li>TanStack Query v5</li>
+                <li>Zustand v5</li>
+                <li>Axios</li>
+                <li>React Table (TanStack)</li>
+                <li>React Hot Toast</li>
+                <li>React Icons</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon icon-green">🖥</div>
+                <h4>Backend</h4>
+            </div>
+            <ul>
+                <li>Node.js 20 LTS</li>
+                <li>Express.js 4</li>
+                <li>TypeScript 5.x</li>
+                <li>PostgreSQL 16</li>
+                <li>Prisma ORM 6</li>
+                <li>Redis 7</li>
+                <li>JWT (jsonwebtoken)</li>
+                <li>Bcrypt</li>
+                <li>Passport.js (OAuth)</li>
+                <li>Cloudinary SDK</li>
+                <li>Nodemailer</li>
+                <li>Multer</li>
+                <li>node-cron</li>
+                <li>Stripe SDK</li>
+                <li>PayPal SDK</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon icon-blue">🚀</div>
+                <h4>DevOps</h4>
+            </div>
+            <ul>
+                <li>Docker + Docker Compose</li>
+                <li>Turborepo (Monorepo)</li>
+                <li>GitHub Actions CI/CD</li>
+                <li>Vercel (Frontend)</li>
+                <li>Railway (Backend)</li>
+                <li>Nginx (Reverse Proxy)</li>
+                <li>Winston (Logging)</li>
+                <li>Jest + Supertest</li>
+                <li>React Testing Library</li>
+                <li>Swagger / OpenAPI 3</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ========== 3. PROJECT STATISTICS ========== -->
+<div class="section">
+    <h2>3. Project Statistics</h2>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">600+</div>
+            <div class="stat-label">Source Files</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">40+</div>
+            <div class="stat-label">DB Models</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">120+</div>
+            <div class="stat-label">API Endpoints</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Dev Phases</div>
+        </div>
+    </div>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">7</div>
+            <div class="stat-label">User Roles</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">50+</div>
+            <div class="stat-label">Pages</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">25+</div>
+            <div class="stat-label">Admin Panels</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">15+</div>
+            <div class="stat-label">Customer Panels</div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== 5. DATABASE SCHEMA ========== -->
+<div class="section page-break">
+    <h2>5. Database Schema (Entity Relationship)</h2>
+
+    <h3>Auth & Users Domain</h3>
+    <div class="er-group">
+        <div class="er-entity">
+            <div class="er-entity-header er-header-purple">User</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div>email: String (unique)</div>
+                <div>password: String?</div>
+                <div>firstName: String</div>
+                <div>lastName: String</div>
+                <div>phone: String?</div>
+                <div>avatar: String?</div>
+                <div>role: UserRole</div>
+                <div>isVerified: Boolean</div>
+                <div>isBanned: Boolean</div>
+                <div>twoFactorEnabled: Boolean</div>
+                <div>twoFactorSecret: String?</div>
+                <div>provider: AuthProvider</div>
+                <div>providerId: String?</div>
+                <div>lastLoginAt: DateTime?</div>
+                <div>deletedAt: DateTime?</div>
+                <div>createdAt: DateTime</div>
+                <div>updatedAt: DateTime</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-purple">Session</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div class="fk">🔗 userId: UUID (FK → User)</div>
+                <div>token: String (unique)</div>
+                <div>ipAddress: String?</div>
+                <div>userAgent: String?</div>
+                <div>expiresAt: DateTime</div>
+                <div>createdAt: DateTime</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-purple">Address</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div class="fk">🔗 userId: UUID (FK → User)</div>
+                <div>label: String</div>
+                <div>fullName: String</div>
+                <div>phone: String</div>
+                <div>street: String</div>
+                <div>city: String</div>
+                <div>state: String</div>
+                <div>zipCode: String</div>
+                <div>country: String</div>
+                <div>isDefault: Boolean</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-purple">AuditLog</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div class="fk">🔗 userId: UUID (FK → User)</div>
+                <div>action: String</div>
+                <div>entity: String</div>
+                <div>entityId: String</div>
+                <div>oldData: JSON?</div>
+                <div>newData: JSON?</div>
+                <div>ipAddress: String</div>
+                <div>createdAt: DateTime</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Product Catalog Domain</h3>
+    <div class="er-group">
+        <div class="er-entity">
+            <div class="er-entity-header er-header-blue">Product</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div>name: String</div>
+                <div>slug: String (unique)</div>
+                <div>description: Text</div>
+                <div>shortDescription: String</div>
+                <div>sku: String (unique)</div>
+                <div>barcode: String?</div>
+                <div>basePrice: Decimal</div>
+                <div>salePrice: Decimal?</div>
+                <div>costPrice: Decimal?</div>
+                <div>type: ProductType</div>
+                <div>status: ProductStatus</div>
+                <div class="fk">🔗 categoryId: UUID (FK)</div>
+                <div class="fk">🔗 brandId: UUID? (FK)</div>
+                <div>tags: String[]</div>
+                <div>isFeatured: Boolean</div>
+                <div>weight: Decimal?</div>
+                <div>dimensions: JSON?</div>
+                <div>downloadUrl: String?</div>
+                <div>searchVector: tsvector</div>
+                <div>avgRating: Decimal</div>
+                <div>totalReviews: Int</div>
+                <div>totalSold: Int</div>
+                <div>seoTitle: String?</div>
+                <div>seoDescription: String?</div>
+                <div>deletedAt: DateTime?</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-blue">ProductVariant</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div class="fk">🔗 productId: UUID (FK)</div>
+                <div>sku: String (unique)</div>
+                <div>name: String</div>
+                <div>color: String?</div>
+                <div>size: String?</div>
+                <div>storage: String?</div>
+                <div>material: String?</div>
+                <div>price: Decimal</div>
+                <div>compareAtPrice: Decimal?</div>
+                <div>stock: Int</div>
+                <div>lowStockThreshold: Int</div>
+                <div>isDefault: Boolean</div>
+                <div>isActive: Boolean</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-blue">Category</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div>name: String</div>
+                <div>slug: String (unique)</div>
+                <div>description: String?</div>
+                <div>image: String?</div>
+                <div>icon: String?</div>
+                <div class="fk">🔗 parentId: UUID? (FK → self)</div>
+                <div>level: Int</div>
+                <div>sortOrder: Int</div>
+                <div>isActive: Boolean</div>
+                <div>isFeatured: Boolean</div>
+                <div>seoTitle: String?</div>
+                <div>seoDescription: String?</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-blue">Brand</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div>name: String</div>
+                <div>slug: String (unique)</div>
+                <div>description: String?</div>
+                <div>logo: String?</div>
+                <div>website: String?</div>
+                <div>isFeatured: Boolean</div>
+                <div>isActive: Boolean</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Order & Payment Domain</h3>
+    <div class="er-group">
+        <div class="er-entity">
+            <div class="er-entity-header er-header-green">Order</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div>orderNumber: String (unique)</div>
+                <div class="fk">🔗 userId: UUID (FK → User)</div>
+                <div class="fk">🔗 addressId: UUID (FK)</div>
+                <div>status: OrderStatus</div>
+                <div>subtotal: Decimal</div>
+                <div>taxAmount: Decimal</div>
+                <div>shippingAmount: Decimal</div>
+                <div>discountAmount: Decimal</div>
+                <div>totalAmount: Decimal</div>
+                <div>paymentMethod: String</div>
+                <div>paymentStatus: PaymentStatus</div>
+                <div class="fk">🔗 couponId: UUID? (FK)</div>
+                <div>notes: String?</div>
+                <div>trackingNumber: String?</div>
+                <div>estimatedDelivery: DateTime?</div>
+                <div>deliveredAt: DateTime?</div>
+                <div>cancelledAt: DateTime?</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-green">Payment</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div class="fk">🔗 orderId: UUID (FK → Order)</div>
+                <div>provider: PaymentProvider</div>
+                <div>transactionId: String?</div>
+                <div>amount: Decimal</div>
+                <div>currency: String</div>
+                <div>status: PaymentStatus</div>
+                <div>metadata: JSON?</div>
+                <div>paidAt: DateTime?</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-green">OrderItem</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div class="fk">🔗 orderId: UUID (FK → Order)</div>
+                <div class="fk">🔗 productId: UUID (FK)</div>
+                <div class="fk">🔗 variantId: UUID? (FK)</div>
+                <div>name: String</div>
+                <div>sku: String</div>
+                <div>price: Decimal</div>
+                <div>quantity: Int</div>
+                <div>total: Decimal</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-green">Refund</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div class="fk">🔗 orderId: UUID (FK)</div>
+                <div class="fk">🔗 userId: UUID (FK)</div>
+                <div>amount: Decimal</div>
+                <div>reason: String</div>
+                <div>status: RefundStatus</div>
+                <div>processedAt: DateTime?</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Inventory Domain</h3>
+    <div class="er-group">
+        <div class="er-entity">
+            <div class="er-entity-header er-header-yellow">Warehouse</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div>name: String</div>
+                <div>code: String (unique)</div>
+                <div>address: String</div>
+                <div>city: String</div>
+                <div>country: String</div>
+                <div>isActive: Boolean</div>
+                <div class="fk">🔗 managerId: UUID? (FK)</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-yellow">InventoryItem</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div class="fk">🔗 variantId: UUID (FK)</div>
+                <div class="fk">🔗 warehouseId: UUID (FK)</div>
+                <div>quantity: Int</div>
+                <div>reservedQty: Int</div>
+                <div>reorderPoint: Int</div>
+                <div>reorderQty: Int</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-yellow">StockTransfer</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div class="fk">🔗 fromWarehouseId: UUID (FK)</div>
+                <div class="fk">🔗 toWarehouseId: UUID (FK)</div>
+                <div class="fk">🔗 variantId: UUID (FK)</div>
+                <div>quantity: Int</div>
+                <div>status: TransferStatus</div>
+                <div class="fk">🔗 initiatedBy: UUID (FK)</div>
+            </div>
+        </div>
+        <div class="er-entity">
+            <div class="er-entity-header er-header-yellow">Supplier</div>
+            <div class="er-entity-body">
+                <div class="pk">🔑 id: UUID (PK)</div>
+                <div>name: String</div>
+                <div>email: String</div>
+                <div>phone: String</div>
+                <div>company: String</div>
+                <div>address: String</div>
+                <div>isActive: Boolean</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== 7. AUTH FLOW ========== -->
+<div class="section page-break">
+    <h2>7. Authentication Flow</h2>
+
+    <h3>JWT Access + Refresh Token Flow</h3>
+    <div class="diagram">
+        <pre style="text-align: left; border: none; margin: 0; background: transparent;">
+    ┌──────────┐                    ┌──────────┐                    ┌──────────┐
+    │  Client  │                    │  Server  │                    │  Redis   │
+    └────┬─────┘                    └────┬─────┘                    └────┬─────┘
+         │                               │                               │
+         │  POST /auth/login             │                               │
+         │  {email, password}            │                               │
+         │──────────────────────────────▶│                               │
+         │                               │  Verify credentials           │
+         │                               │  Generate Access Token (15m)  │
+         │                               │  Generate Refresh Token (7d)  │
+         │                               │                               │
+         │                               │  Store session ──────────────▶│
+         │                               │                               │
+         │  ◀──────────────────────────── │                               │
+         │  {accessToken, refreshToken}  │                               │
+         │                               │                               │
+         │  GET /api/products            │                               │
+         │  Authorization: Bearer xxx    │                               │
+         │──────────────────────────────▶│                               │
+         │                               │  Verify JWT                   │
+         │                               │  Check blacklist ────────────▶│
+         │  ◀──────────────────────────── │  ◀────────────────────────── │
+         │  {products: [...]}            │                               │
+         │                               │                               │
+         │  POST /auth/refresh           │                               │
+         │  {refreshToken}               │                               │
+         │──────────────────────────────▶│                               │
+         │                               │  Verify refresh token         │
+         │                               │  Rotate: new access + refresh │
+         │                               │  Blacklist old ──────────────▶│
+         │  ◀──────────────────────────── │                               │
+         │  {newAccessToken,             │                               │
+         │   newRefreshToken}            │                               │
+         │                               │                               │
+         │  POST /auth/logout            │                               │
+         │──────────────────────────────▶│                               │
+         │                               │  Blacklist tokens ───────────▶│
+         │                               │  Delete session ─────────────▶│
+         │  ◀──────────────────────────── │                               │
+         │  {message: "Logged out"}      │                               │
+         │                               │                               │
+        </pre>
+    </div>
+
+    <h3>OAuth 2.0 Flow (Google / GitHub)</h3>
+    <div class="flow">
+        <div class="flow-box fb-purple">1. User clicks<br/>"Login with Google"</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-blue">2. Redirect to<br/>Google OAuth</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-green">3. User grants<br/>permission</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-yellow">4. Callback with<br/>auth code</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-purple">5. Exchange for<br/>tokens</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-green">6. Create/find user<br/>issue JWT</div>
+    </div>
+
+    <h3>Two-Factor Authentication Flow</h3>
+    <div class="flow">
+        <div class="flow-box fb-purple">1. Login with<br/>email + password</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-yellow">2. Server returns<br/>2FA required</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-blue">3. User enters<br/>TOTP code</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-green">4. Verify TOTP<br/>issue JWT</div>
+    </div>
+</div>
+
+<!-- ========== 8. ORDER STATE MACHINE ========== -->
+<div class="section">
+    <h2>8. Order State Machine</h2>
+    <div class="diagram">
+        <pre style="text-align: left; border: none; margin: 0; background: transparent;">
+                                    ┌─────────────┐
+                                    │   PENDING    │ ◀── Order placed
+                                    └──────┬──────┘
+                                           │ confirm
+                                    ┌──────▼──────┐
+                               ┌────│ PROCESSING  │────┐
+                               │    └──────┬──────┘    │
+                               │           │ pack      │ cancel
+                               │    ┌──────▼──────┐    │
+                               │    │   PACKED     │    │
+                               │    └──────┬──────┘    │
+                               │           │ ship      │
+                               │    ┌──────▼──────┐    │
+                               │    │   SHIPPED    │────┤
+                               │    └──────┬──────┘    │
+                               │           │ deliver   │
+                               │    ┌──────▼──────┐    │      ┌──────────────┐
+                               │    │  DELIVERED   │────┼─────▶│  CANCELLED   │
+                               │    └──────┬──────┘    │      └──────────────┘
+                               │           │ return    │
+                               │    ┌──────▼──────┐    │
+                               │    │  RETURNED    │    │
+                               │    └──────┬──────┘    │
+                               │           │ refund    │
+                               │    ┌──────▼──────┐    │      ┌──────────────┐
+                               └───▶│  REFUNDED    │◀───┘     │PARTIAL REFUND│
+                                    └─────────────┘           └──────────────┘
+        </pre>
+    </div>
+</div>
+
+<!-- ========== 9. PAYMENT FLOW ========== -->
+<div class="section page-break">
+    <h2>9. Payment Processing Flow</h2>
+
+    <h3>Stripe Payment Flow</h3>
+    <div class="diagram">
+        <pre style="text-align: left; border: none; margin: 0; background: transparent;">
+    ┌──────────┐         ┌──────────┐         ┌──────────┐
+    │  Client  │         │  Server  │         │  Stripe  │
+    └────┬─────┘         └────┬─────┘         └────┬─────┘
+         │                    │                    │
+         │ POST /payments/    │                    │
+         │   stripe/intent    │                    │
+         │───────────────────▶│                    │
+         │                    │ Create PaymentIntent│
+         │                    │───────────────────▶│
+         │                    │◀───────────────────│
+         │                    │ {clientSecret}      │
+         │◀───────────────────│                    │
+         │                    │                    │
+         │ confirmCardPayment │                    │
+         │ (Stripe Elements)  │                    │
+         │────────────────────────────────────────▶│
+         │◀────────────────────────────────────────│
+         │ {paymentIntent}    │                    │
+         │                    │                    │
+         │                    │  Webhook: payment_ │
+         │                    │  intent.succeeded   │
+         │                    │◀───────────────────│
+         │                    │  Update order status│
+         │                    │  Send confirmation  │
+         │                    │                    │
+        </pre>
+    </div>
+
+    <h3>PayPal Payment Flow</h3>
+    <div class="flow">
+        <div class="flow-box fb-blue">1. Create PayPal<br/>Order (Server)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-yellow">2. Redirect to<br/>PayPal Checkout</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-green">3. User approves<br/>on PayPal</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-purple">4. Capture payment<br/>(Server)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box fb-green">5. Update order<br/>Send invoice</div>
+    </div>
+</div>
+
+<!-- ========== 10. SEARCH ARCHITECTURE ========== -->
+<div class="section">
+    <h2>10. Search Architecture</h2>
+
+    <div class="card">
+        <h4>Search Pipeline</h4>
+        <div class="flow">
+            <div class="flow-box fb-purple">User types<br/>search query</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-blue">Debounce<br/>(300ms)</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-yellow">Check Redis<br/>autocomplete cache</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-green">PostgreSQL<br/>FTS query</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-purple">Apply filters<br/>+ sort</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-blue">Return<br/>paginated results</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h4>PostgreSQL Full-Text Search Implementation</h4>
+        <pre>
+-- Search vector column on Product table
+ALTER TABLE "Product" ADD COLUMN "searchVector" tsvector;
+
+-- GIN index for fast full-text search
+CREATE INDEX "Product_searchVector_idx" ON "Product" USING GIN ("searchVector");
+
+-- Auto-update trigger
+CREATE FUNCTION update_search_vector() RETURNS trigger AS $$
+BEGIN
+  NEW."searchVector" := 
+    setweight(to_tsvector('english', COALESCE(NEW.name, '')), 'A') ||
+    setweight(to_tsvector('english', COALESCE(NEW.description, '')), 'B') ||
+    setweight(to_tsvector('english', COALESCE(NEW.tags::text, '')), 'C');
+  RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+-- Search query with ranking
+SELECT *, ts_rank("searchVector", plainto_tsquery('english', $1)) AS rank
+FROM "Product"
+WHERE "searchVector" @@ plainto_tsquery('english', $1)
+  AND "deletedAt" IS NULL
+ORDER BY rank DESC
+LIMIT $2 OFFSET $3;
+        </pre>
+    </div>
+</div>
+
+<!-- ========== 11. CACHING STRATEGY ========== -->
+<div class="section">
+    <h2>11. Caching Strategy</h2>
+    <table>
+        <thead>
+            <tr><th>Cache Key Pattern</th><th>Data</th><th>TTL</th><th>Invalidation</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>session:{userId}</code></td><td>User session data</td><td>7 days</td><td>On logout</td></tr>
+            <tr><td><code>product:{slug}</code></td><td>Product detail</td><td>1 hour</td><td>On product update</td></tr>
+            <tr><td><code>products:list:{hash}</code></td><td>Product list (paginated)</td><td>5 min</td><td>On any product change</td></tr>
+            <tr><td><code>categories:tree</code></td><td>Category tree</td><td>24 hours</td><td>On category change</td></tr>
+            <tr><td><code>cart:{userId|guestId}</code></td><td>Cart items</td><td>30 days</td><td>On cart update</td></tr>
+            <tr><td><code>search:autocomplete:{query}</code></td><td>Search suggestions</td><td>1 hour</td><td>On product change</td></tr>
+            <tr><td><code>token:blacklist:{jti}</code></td><td>Revoked JWT ID</td><td>Token expiry</td><td>Auto-expire</td></tr>
+            <tr><td><code>ratelimit:{ip}:{endpoint}</code></td><td>Request count</td><td>1 min</td><td>Auto-expire</td></tr>
+            <tr><td><code>analytics:daily:{date}</code></td><td>Daily stats</td><td>24 hours</td><td>Cron refresh</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ========== 12. ROLES & PERMISSIONS ========== -->
+<div class="section page-break">
+    <h2>12. User Roles & Permissions Matrix</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Permission</th>
+                <th>Guest</th>
+                <th>Customer</th>
+                <th>Delivery</th>
+                <th>Warehouse</th>
+                <th>Moderator</th>
+                <th>Admin</th>
+                <th>Super Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Browse products</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Add to cart</td><td>✅</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td>Place orders</td><td>—</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td>Write reviews</td><td>—</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td>Customer dashboard</td><td>—</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td>Update delivery status</td><td>—</td><td>—</td><td>✅</td><td>—</td><td>—</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Manage inventory</td><td>—</td><td>—</td><td>—</td><td>✅</td><td>—</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Manage stock transfers</td><td>—</td><td>—</td><td>—</td><td>✅</td><td>—</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Moderate reviews</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Moderate blog comments</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Manage products</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Manage orders</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Manage customers</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td><td>✅</td></tr>
+            <tr><td>View analytics</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Manage CMS</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Manage roles</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td></tr>
+            <tr><td>Manage employees</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td></tr>
+            <tr><td>System settings</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td></tr>
+            <tr><td>Delete anything</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✅</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ========== PHASES ========== -->
+<div class="section page-break">
+    <h2>13–20. Implementation Phases</h2>
+
+    <!-- Phase 1 -->
+    <div class="phase-header">
+        <div class="phase-number">1</div>
+        <div class="phase-info">
+            <h3>Foundation & Infrastructure</h3>
+            <p>~80 files • Monorepo setup, database schema, auth system, core backend</p>
+        </div>
+    </div>
+    <div class="card">
+        <h4>Deliverables</h4>
+        <div class="timeline">
+            <div class="timeline-item"><strong>Monorepo</strong> — Turborepo + npm workspaces root config</div>
+            <div class="timeline-item"><strong>Docker</strong> — PostgreSQL 16 + Redis 7 dev services</div>
+            <div class="timeline-item"><strong>Shared Package</strong> — Types, constants, validators shared across apps</div>
+            <div class="timeline-item"><strong>Prisma Schema</strong> — 40+ models with all relations, indexes, enums</div>
+            <div class="timeline-item"><strong>Express Server</strong> — App entry, config, logger, error handling</div>
+            <div class="timeline-item"><strong>Middleware Stack</strong> — Auth, RBAC, validation, rate limiting, CORS, upload, cache, audit</div>
+            <div class="timeline-item"><strong>Utilities</strong> — API response, pagination, token, hashing, OTP</div>
+            <div class="timeline-item"><strong>Auth Module</strong> — Register, login, OAuth, 2FA, forgot/reset password, sessions</div>
+            <div class="timeline-item"><strong>User Module</strong> — CRUD, profile, addresses, role management</div>
+            <div class="timeline-item"><strong>Email Templates</strong> — Welcome, password reset, order confirmation</div>
+            <div class="timeline-item"><strong>Seed Data</strong> — Initial admin user, sample data</div>
+        </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-header">
+        <div class="phase-number">2</div>
+        <div class="phase-info">
+            <h3>Product Catalog & Search</h3>
+            <p>~60 files • Categories, brands, products, inventory, search, reviews</p>
+        </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-header">
+        <div class="phase-number">3</div>
+        <div class="phase-info">
+            <h3>Cart, Checkout & Payments</h3>
+            <p>~50 files • Cart, coupons, shipping, taxes, orders, Stripe, PayPal</p>
+        </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-header">
+        <div class="phase-number">4</div>
+        <div class="phase-info">
+            <h3>Next.js Frontend Foundation</h3>
+            <p>~80 files • App Router setup, Shadcn UI, stores, auth pages, layout</p>
+        </div>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="phase-header">
+        <div class="phase-number">5</div>
+        <div class="phase-info">
+            <h3>Shop Frontend Pages</h3>
+            <p>~70 files • Landing, home, product listing, product detail, cart, checkout, search</p>
+        </div>
+    </div>
+
+    <!-- Phase 6 -->
+    <div class="phase-header">
+        <div class="phase-number">6</div>
+        <div class="phase-info">
+            <h3>Customer Dashboard</h3>
+            <p>~40 files • All 15 customer dashboard pages</p>
+        </div>
+    </div>
+
+    <!-- Phase 7 -->
+    <div class="phase-header">
+        <div class="phase-number">7</div>
+        <div class="phase-info">
+            <h3>Admin Dashboard</h3>
+            <p>~100 files • Analytics, 25+ management pages, reports</p>
+        </div>
+    </div>
+
+    <!-- Phase 8 -->
+    <div class="phase-header">
+        <div class="phase-number">8</div>
+        <div class="phase-info">
+            <h3>DevOps, Testing & Polish</h3>
+            <p>~40 files • Docker prod, CI/CD, SEO, security, Swagger, tests</p>
+        </div>
+    </div>
+</div>
+
+<!-- ========== 21. ENV VARS ========== -->
+<div class="section page-break">
+    <h2>21. Environment Variables</h2>
+    <div class="card">
+        <pre>
+# ═══════════════════════════════════════════
+#  DATABASE
+# ═══════════════════════════════════════════
+DATABASE_URL=postgresql://user:pass@localhost:5432/nexastore
+REDIS_URL=redis://localhost:6379
+
+# ═══════════════════════════════════════════
+#  AUTHENTICATION
+# ═══════════════════════════════════════════
+JWT_ACCESS_SECRET=your-access-secret-min-32-chars
+JWT_REFRESH_SECRET=your-refresh-secret-min-32-chars
+JWT_ACCESS_EXPIRY=15m
+JWT_REFRESH_EXPIRY=7d
+OTP_EXPIRY_MINUTES=10
+BCRYPT_SALT_ROUNDS=12
+
+# ═══════════════════════════════════════════
+#  OAUTH 2.0
+# ═══════════════════════════════════════════
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=http://localhost:5000/api/v1/auth/google/callback
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+GITHUB_CALLBACK_URL=http://localhost:5000/api/v1/auth/github/callback
+
+# ═══════════════════════════════════════════
+#  PAYMENTS
+# ═══════════════════════════════════════════
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+PAYPAL_MODE=sandbox
+
+# ═══════════════════════════════════════════
+#  CLOUDINARY
+# ═══════════════════════════════════════════
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# ═══════════════════════════════════════════
+#  EMAIL (SMTP)
+# ═══════════════════════════════════════════
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASS=
+EMAIL_FROM=NexaStore &lt;noreply@nexastore.com&gt;
+
+# ═══════════════════════════════════════════
+#  APPLICATION
+# ═══════════════════════════════════════════
+NODE_ENV=development
+PORT=5000
+NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+CORS_ORIGIN=http://localhost:3000
+        </pre>
+    </div>
+</div>
+
+<!-- ========== 22. DEPLOYMENT ========== -->
+<div class="section">
+    <h2>22. Deployment Architecture</h2>
+    <div class="diagram">
+        <pre style="text-align: left; border: none; margin: 0; background: transparent;">
+┌─────────────────────────────────────────────────────────────┐
+│                    GitHub Repository                         │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  Push to main → GitHub Actions CI/CD                │    │
+│  └────────────┬────────────────────┬───────────────────┘    │
+└───────────────┼────────────────────┼────────────────────────┘
+                │                    │
+    ┌───────────▼──────┐  ┌─────────▼──────────┐
+    │     Vercel        │  │     Railway         │
+    │  ┌──────────────┐ │  │  ┌───────────────┐ │
+    │  │  Next.js 15  │ │  │  │  Express.js   │ │
+    │  │  Frontend    │ │  │  │  Backend API  │ │
+    │  │  SSR + ISR   │ │  │  │              │ │
+    │  └──────────────┘ │  │  └──────┬────────┘ │
+    │  CDN Edge Network │  │         │          │
+    └──────────────────┘  │  ┌──────▼────────┐ │
+                           │  │  PostgreSQL   │ │
+                           │  │  (Managed)    │ │
+                           │  └───────────────┘ │
+                           │  ┌───────────────┐ │
+                           │  │    Redis       │ │
+                           │  │  (Managed)    │ │
+                           │  └───────────────┘ │
+                           └──────────────────┘
+
+    ┌──────────────────────────────────────────┐
+    │          External Services                │
+    │  Cloudinary (CDN) │ Stripe │ PayPal      │
+    │  Google OAuth     │ GitHub OAuth          │
+    │  SMTP Server      │                       │
+    └──────────────────────────────────────────┘
+        </pre>
+    </div>
+</div>
+
+<!-- ========== 25. DEVELOPMENT RULES ========== -->
+<div class="section page-break">
+    <h2>25. Development Rules & Standards</h2>
+
+    <div class="alert alert-danger">
+        <strong>⚠ MANDATORY:</strong> These rules are non-negotiable and must be followed for every phase.
+    </div>
+
+    <div class="card">
+        <h4>Code Quality Standards</h4>
+        <ul>
+            <li>TypeScript strict mode enabled everywhere</li>
+            <li>SOLID principles enforced</li>
+            <li>Repository Pattern for data access</li>
+            <li>Service Layer for business logic</li>
+            <li>Controller Layer for HTTP handling only</li>
+            <li>No business logic in controllers or routes</li>
+            <li>Meaningful variable and function names</li>
+            <li>Maximum function length: 40 lines</li>
+            <li>Single responsibility per file</li>
+            <li>DRY — No code duplication</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h4>Phase Completion Checklist</h4>
+        <table>
+            <thead><tr><th>#</th><th>Check</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td>Full phase code review completed</td><td>☐</td></tr>
+                <tr><td>2</td><td>Inefficient/redundant code refactored</td><td>☐</td></tr>
+                <tr><td>3</td><td>All functionality verified working</td><td>☐</td></tr>
+                <tr><td>4</td><td>All bugs and warnings fixed</td><td>☐</td></tr>
+                <tr><td>5</td><td>Dead/duplicate code removed</td><td>☐</td></tr>
+                <tr><td>6</td><td>No console errors</td><td>☐</td></tr>
+                <tr><td>7</td><td>APIs and DB interactions validated</td><td>☐</td></tr>
+                <tr><td>8</td><td>Auth and authorization verified</td><td>☐</td></tr>
+                <tr><td>9</td><td>Performance optimized</td><td>☐</td></tr>
+                <tr><td>10</td><td>UI/UX consistency checked</td><td>☐</td></tr>
+                <tr><td>11</td><td>Security vulnerabilities reviewed</td><td>☐</td></tr>
+                <tr><td>12</td><td>Scalability confirmed</td><td>☐</td></tr>
+                <tr><td>13</td><td>Code meets production standards</td><td>☐</td></tr>
+                <tr><td>14</td><td>All tests pass</td><td>☐</td></tr>
+                <tr><td>15</td><td>Phase documentation updated</td><td>☐</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h4>Architectural Patterns</h4>
+        <div class="flow">
+            <div class="flow-box fb-purple">Route</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-yellow">Validation<br/>Middleware</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-blue">Controller</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-green">Service</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-red">Repository</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box fb-purple">Prisma<br/>DB</div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<div class="section" style="text-align: center; padding: 40px 0; border-top: 1px solid var(--border);">
+    <p style="color: var(--text-muted); font-size: 13px;">
+        NexaStore Enterprise E-Commerce Platform — Technical Documentation v1.0<br/>
+        Generated July 2026 • Confidential
+    </p>
+</div>
+
+</div>
+</body>
+</html>

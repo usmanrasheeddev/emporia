@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Order Confirmation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type="text/css">
+    body, table, td, a { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; width: 100% !important; }
+    .email-container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .header { background: linear-gradient(135deg, #10b981, #059669); padding: 40px 20px; text-align: center; }
+    .logo { font-size: 28px; font-weight: 800; color: #ffffff; letter-spacing: -1px; text-decoration: none; }
+    .content { padding: 40px 30px; color: #334155; line-height: 1.6; }
+    h1 { font-size: 24px; font-weight: 700; color: #1e293b; margin-top: 0; margin-bottom: 8px; }
+    p { margin-bottom: 20px; font-size: 16px; }
+    .order-details-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    .order-details-table th, .order-details-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; font-size: 14px; }
+    .order-details-table th { background: #f8fafc; font-weight: 600; color: #475569; }
+    .total-row td { border-top: 2px solid #e2e8f0; font-weight: 700; color: #1e293b; font-size: 16px; }
+    .footer { background: #f8fafc; padding: 20px; text-align: center; font-size: 13px; color: #94a3b8; border-top: 1px solid #e2e8f0; }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <a href="{{appUrl}}" class="logo">NexaStore</a>
+    </div>
+    <div class="content">
+      <h1>Order Confirmed!</h1>
+      <p>Thank you for your purchase. We are pleased to confirm that your order <strong>#{{orderNumber}}</strong> has been received and is being processed.</p>
+      
+      <table class="order-details-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each items}}
+          <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.quantity}}</td>
+            <td>${{this.price}}</td>
+            <td>${{this.total}}</td>
+          </tr>
+          {{/each}}
+          <tr>
+            <td colspan="3" style="text-align: right; font-weight: 600; color: #64748b;">Subtotal</td>
+            <td>${{subtotal}}</td>
+          </tr>
+          {{#if discount}}
+          <tr>
+            <td colspan="3" style="text-align: right; font-weight: 600; color: #dc2626;">Discount</td>
+            <td style="color: #dc2626;">-${{discount}}</td>
+          </tr>
+          {{/if}}
+          <tr>
+            <td colspan="3" style="text-align: right; font-weight: 600; color: #64748b;">Tax</td>
+            <td>${{tax}}</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="text-align: right; font-weight: 600; color: #64748b;">Shipping</td>
+            <td>${{shipping}}</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align: right;">Total</td>
+            <td>${{total}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>We'll notify you as soon as your order has shipped with tracking details.</p>
+      <p>Thank you,<br>The NexaStore Team</p>
+    </div>
+    <div class="footer">
+      &copy; 2026 NexaStore. All rights reserved.<br>
+      For any inquiries, please contact support at {{supportEmail}}.
+    </div>
+  </div>
+</body>
+</html>

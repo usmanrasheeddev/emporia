@@ -1,0 +1,29 @@
+{
+  "name": "nexastore",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "clean": "turbo clean",
+    "db:migrate": "cd apps/server && npx prisma migrate dev",
+    "db:generate": "cd apps/server && npx prisma generate",
+    "db:seed": "cd apps/server && npx prisma db seed",
+    "db:studio": "cd apps/server && npx prisma studio",
+    "db:reset": "cd apps/server && npx prisma migrate reset",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\""
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0",
+    "prettier": "^3.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "npm@10.0.0"
+}

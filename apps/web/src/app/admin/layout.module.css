@@ -1,0 +1,98 @@
+.adminContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-12);
+  min-height: calc(100vh - 128px);
+}
+
+@media (min-width: 768px) {
+  .adminContainer {
+    flex-direction: row;
+  }
+}
+
+.loaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.loadingText {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.sidebar {
+  width: 100%;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    width: 240px;
+    border-bottom: none;
+    border-right: 1px solid var(--color-border);
+    padding-bottom: 0;
+    padding-right: var(--space-6);
+  }
+}
+
+.sidebarHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.adminLabel {
+  font-size: var(--text-base);
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+}
+
+.adminRole {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.navLink {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+.navLink:hover {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.activeLink {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.activeLink:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.content {
+  flex-grow: 1;
+}

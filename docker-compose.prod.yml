@@ -1,0 +1,90 @@
+# ═══════════════════════════════════════════════════════════════
+# NexaStore Monorepo — Production Docker Compose Configuration
+# Links PostgreSQL, Redis, Backend REST APIs, and Frontend Web Client
+# ═══════════════════════════════════════════════════════════════
+
+version: '3.9'
+
+services:
+  # ─── Database ───────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexastore-postgres-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nexastore
+      POSTGRES_PASSWORD: nexastore_pass
+      POSTGRES_DB: nexastore_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U nexastore -d nexastore_db']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Redis Cache ────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: nexastore-redis-prod
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_prod_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+  # ─── Backend Server API ─────────────────────────────────────
+  server:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    container_name: nexastore-server-prod
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://nexastore:nexastore_pass@postgres:5432/nexastore_db
+      - REDIS_URL=redis://redis:6379
+      - JWT_ACCESS_SECRET=your-super-secret-access-key-change-in-production-min-32-chars
+      - JWT_REFRESH_SECRET=your-super-secret-refresh-key-change-in-production-min-32-chars
+      - JWT_ACCESS_EXPIRY=15m
+      - JWT_REFRESH_EXPIRY=7d
+      - BCRYPT_SALT_ROUNDS=12
+      - OTP_EXPIRY_MINUTES=10
+      - NODE_ENV=production
+      - PORT=5000
+      - CORS_ORIGIN=http://localhost:3000
+    ports:
+      - '5000:5000'
+
+  # ─── Frontend Next.js Web App ───────────────────────────────
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: nexastore-web-prod
+    restart: unless-stopped
+    depends_on:
+      - server
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+    ports:
+      - '3000:3000'
+
+volumes:
+  postgres_prod_data:
+    driver: local
+  redis_prod_data:
+    driver: local
