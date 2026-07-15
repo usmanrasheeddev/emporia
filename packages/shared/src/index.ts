@@ -2,7 +2,7 @@
 // NexaStore Shared Package — Barrel Export
 // ═══════════════════════════════════════════════════════════════
 
-export * from './types';
-export * from './constants';
-export * from './validators';
-export * from './utils';
+export * from './types/index.js';
+export * from './constants/index.js';
+export * from './validators/index.js';
+export * from './utils/index.js';
