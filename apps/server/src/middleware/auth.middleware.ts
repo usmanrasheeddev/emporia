@@ -52,8 +52,8 @@ export const authenticate = asyncHandler(
 
       // Check if session is still valid in database
       if (decoded.sessionId) {
-        const session = await prisma.session.findUnique({
-          where: { id: decoded.sessionId },
+        const session = await prisma.session.findFirst({
+          where: { token: decoded.sessionId, isValid: true },
         });
 
         if (!session || !session.isValid || session.expiresAt < new Date()) {
