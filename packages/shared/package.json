@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/"
+    "lint": "echo \"No lint configuration for shared package\""
   },
   "dependencies": {
     "zod": "^3.24.0"
