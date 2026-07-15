@@ -19,7 +19,10 @@ interface RegisterData {
 
 interface AuthResponse {
   user: User;
-  token: string;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
 }
 
 interface AuthState {
@@ -49,7 +52,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         '/auth/login',
         credentials,
       );
-      const { user, token } = response.data;
+      const { user, tokens } = response.data;
+      const token = tokens.accessToken;
 
       localStorage.setItem(TOKEN_KEY, token);
       set({
@@ -70,19 +74,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   register: async (data: RegisterData) => {
     set({ isLoading: true });
     try {
-      const response = await api.post<ApiResponse<AuthResponse>>(
+      await api.post<ApiResponse<any>>(
         '/auth/register',
         data,
       );
-      const { user, token } = response.data;
-
-      localStorage.setItem(TOKEN_KEY, token);
-      set({
-        user,
-        token,
-        isAuthenticated: true,
-        isLoading: false,
-      });
+      set({ isLoading: false });
     } catch (error) {
       set({ isLoading: false });
       if (error instanceof ApiClientError) {
