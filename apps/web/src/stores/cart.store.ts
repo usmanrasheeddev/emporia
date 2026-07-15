@@ -45,12 +45,9 @@ export const useCartStore = create<CartState>((set) => ({
     try {
       const response = await api.get<ApiResponse<CartSummary>>('/cart');
       set({ ...applyCartData(response.data), isLoading: false });
-    } catch (error) {
+    } catch {
+      // Silently handle cart fetch errors (e.g. unauthenticated guest users)
       set({ isLoading: false });
-      if (error instanceof ApiClientError) {
-        throw error;
-      }
-      throw new Error('Failed to fetch cart.');
     }
   },
 

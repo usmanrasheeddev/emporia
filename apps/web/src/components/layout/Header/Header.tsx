@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
   }, [loadFromStorage]);
 
   useEffect(() => {
-    fetchCart();
+    fetchCart().catch(() => {});
   }, [fetchCart]);
 
   const handleSearchSubmit = () => {
