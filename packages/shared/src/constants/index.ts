@@ -3,7 +3,7 @@
 // Application-wide constants shared across frontend and backend
 // ═══════════════════════════════════════════════════════════════
 
-import { UserRole, OrderStatus, PaymentProvider, ProductType, ProductStatus } from '../types';
+import { UserRole, OrderStatus, PaymentProvider, ProductType, ProductStatus } from '../types/index.js';
 
 // ─── Pagination Defaults ─────────────────────────────────────
 export const PAGINATION = {
