@@ -29,7 +29,7 @@ export default function WalletPage() {
     queryFn: () => api.get<any>(`/payments/wallet?page=${page}&limit=10`),
   });
 
-  const wallet = walletResponse || { balance: 0, transactions: [], meta: { totalPages: 1 } };
+  const wallet = walletResponse?.data || { balance: 0, transactions: [], meta: { totalPages: 1 } };
 
   // Top up Mutation
   const topUpMutation = useMutation({

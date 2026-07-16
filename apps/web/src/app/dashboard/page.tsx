@@ -31,8 +31,8 @@ export default function DashboardOverviewPage() {
     queryFn: () => api.get<any>('/payments/wallet'),
   });
 
-  const orders = ordersResponse?.orders || [];
-  const walletBalance = walletResponse?.balance || 0;
+  const orders = ordersResponse?.data || [];
+  const walletBalance = walletResponse?.data?.balance || 0;
 
   return (
     <div className={styles.container}>

@@ -24,7 +24,7 @@ export default function OrderHistoryPage() {
     queryFn: () => api.get<any>(`/orders/me?page=${page}&limit=10`),
   });
 
-  const orders = ordersResponse?.orders || [];
+  const orders = ordersResponse?.data || [];
   const meta = ordersResponse?.meta || { page: 1, limit: 10, total: 0, totalPages: 1 };
 
   return (

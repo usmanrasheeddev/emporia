@@ -38,7 +38,7 @@ export default function SupportTicketsPage() {
     queryFn: () => api.get<any>(`/tickets/my?page=${page}&limit=10`), // Note: endpoint helper route mapped in app.ts router
   });
 
-  const tickets = ticketsResponse?.tickets || [];
+  const tickets = ticketsResponse?.data || [];
   const meta = ticketsResponse?.meta || { page: 1, limit: 10, total: 0, totalPages: 1 };
 
   // Create ticket Mutation

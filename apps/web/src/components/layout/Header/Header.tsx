@@ -91,7 +91,7 @@ export const Header: React.FC = () => {
             <div className={styles.userProfile}>
               <Link href="/dashboard" aria-label="User Dashboard">
                 <Avatar
-                  fallback={`${user.firstName[0] || ''}${user.lastName[0] || ''}`}
+                  fallback={`${(user?.firstName || '')[0] || ''}${(user?.lastName || '')[0] || ''}`}
                   size="sm"
                 />
               </Link>
