@@ -3,7 +3,7 @@
 // Displays static banners, featured categories, and featured products
 // ═══════════════════════════════════════════════════════════════
 
-// Trigger Vercel clean rebuild for environment variables update
+// Production deployment trigger v2 - all auth fixes applied
 'use client';
 
 import React from 'react';
