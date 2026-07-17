@@ -332,4 +332,43 @@ export class OrderService {
       });
     });
   }
+
+  async getDashboardStats() {
+    const [totalOrders, revenueAggregate, totalCustomers, totalProducts] = await Promise.all([
+      prisma.order.count(),
+      prisma.order.aggregate({
+        where: { paymentStatus: 'COMPLETED' },
+        _sum: { totalAmount: true },
+      }),
+      prisma.user.count({ where: { role: 'CUSTOMER', deletedAt: null } }),
+      prisma.product.count({ where: { deletedAt: null } }),
+    ]);
+
+    return {
+      totalOrders,
+      totalRevenue: Number(revenueAggregate._sum.totalAmount || 0),
+      totalCustomers,
+      totalProducts,
+    };
+  }
+
+  async getDailyAnalytics() {
+    const rawStats = await prisma.$queryRaw<Array<{ date: Date | string; revenue: number | string; orders: number | string | bigint }>>`
+      SELECT 
+        DATE("createdAt") as date,
+        SUM("totalAmount")::float as revenue,
+        COUNT(*)::bigint as orders
+      FROM orders
+      WHERE status != 'CANCELLED'
+      GROUP BY DATE("createdAt")
+      ORDER BY DATE("createdAt") ASC
+      LIMIT 30
+    `;
+
+    return rawStats.map((row) => ({
+      date: row.date,
+      revenue: Number(row.revenue || 0),
+      orders: Number(row.orders || 0),
+    }));
+  }
 }

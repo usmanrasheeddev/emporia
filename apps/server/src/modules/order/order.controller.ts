@@ -48,4 +48,14 @@ export class OrderController {
     const updated = await service.updateStatus(id, status, req.user!.id, note);
     res.json(ApiResponse.success('Order status updated successfully', updated));
   });
+
+  static getDashboardStats = asyncHandler(async (req: RequestWithUser, res: Response) => {
+    const stats = await service.getDashboardStats();
+    res.json(ApiResponse.success('Dashboard stats retrieved successfully', stats));
+  });
+
+  static getDailyAnalytics = asyncHandler(async (req: RequestWithUser, res: Response) => {
+    const daily = await service.getDailyAnalytics();
+    res.json(ApiResponse.success('Daily transactions ledger retrieved successfully', daily));
+  });
 }

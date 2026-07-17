@@ -24,6 +24,8 @@ router.use(authenticate);
 
 router.get('/me', validate(orderQuerySchema, 'query'), OrderController.getMyOrders);
 router.post('/', validate(createOrderSchema), OrderController.create);
+router.get('/dashboard/stats', authorize(UserRole.ADMIN, UserRole.SUPER_ADMIN), OrderController.getDashboardStats);
+router.get('/dashboard/daily', authorize(UserRole.ADMIN, UserRole.SUPER_ADMIN), OrderController.getDailyAnalytics);
 router.get('/:id', OrderController.getById);
 
 // ─── Administrative Order Operations ─────────────────────────

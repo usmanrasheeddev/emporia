@@ -33,7 +33,7 @@ export default function AdminNewProductPage() {
   // Fetch Category Tree list for options
   const { data: categories } = useQuery({
     queryKey: ['admin-categories-tree'],
-    queryFn: () => api.get<any[]>('/categories/tree'),
+    queryFn: () => api.get<any>('/categories/tree'),
   });
 
   // Fetch Brands list for options
@@ -43,13 +43,13 @@ export default function AdminNewProductPage() {
   });
 
   const categoryOptions =
-    categories?.map((cat: any) => ({
+    categories?.data?.map((cat: any) => ({
       value: cat.id,
       label: cat.name,
     })) || [];
 
   const brandOptions =
-    brandsResponse?.brands?.map((b: any) => ({
+    brandsResponse?.data?.map((b: any) => ({
       value: b.id,
       label: b.name,
     })) || [];

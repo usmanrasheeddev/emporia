@@ -137,6 +137,46 @@ export class InventoryRepository {
     });
   }
 
+  async findLowStockAlerts(page: number, limit: number): Promise<{ items: any[]; total: number }> {
+    const skip = (page - 1) * limit;
+
+    // 1. Get IDs of low stock items
+    const rawIds = await prisma.$queryRaw<Array<{ id: string }>>`
+      SELECT id FROM inventory_items 
+      WHERE quantity <= "reorderPoint"
+      ORDER BY "updatedAt" DESC
+      LIMIT ${limit} OFFSET ${skip}
+    `;
+    const ids = rawIds.map((row) => row.id);
+
+    // 2. Get total count
+    const countResult = await prisma.$queryRaw<Array<{ count: string | number | bigint }>>`
+      SELECT COUNT(*)::bigint as count FROM inventory_items 
+      WHERE quantity <= "reorderPoint"
+    `;
+    const total = Number(countResult[0]?.count || 0);
+
+    if (ids.length === 0) {
+      return { items: [], total };
+    }
+
+    // 3. Query details via standard Prisma client
+    const items = await prisma.inventoryItem.findMany({
+      where: { id: { in: ids } },
+      include: {
+        variant: {
+          include: {
+            product: true,
+          },
+        },
+        warehouse: true,
+      },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    return { items, total };
+  }
+
   // ─── Inventory Logs ──────────────────────────────────────────
 
   async createInventoryLog(data: {

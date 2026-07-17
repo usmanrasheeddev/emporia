@@ -28,7 +28,7 @@ export default function AdminTicketsPage() {
     queryFn: () => api.get<any>(`/tickets?page=${page}&limit=10`), // Endpoint defined in server support tickets routing
   });
 
-  const tickets = ticketsResponse?.tickets || [];
+  const tickets = ticketsResponse?.data || [];
   const meta = ticketsResponse?.meta || { page: 1, limit: 10, total: 0, totalPages: 1 };
 
   // Assign staff ticket Mutation

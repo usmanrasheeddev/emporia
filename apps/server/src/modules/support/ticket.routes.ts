@@ -16,6 +16,7 @@ const router = Router();
 router.use(authenticate);
 
 router.post('/', supportLimiter, validate(createTicketSchema), TicketController.create);
+router.get('/', TicketController.getMyTickets);
 router.get('/my', TicketController.getMyTickets);
 router.get('/:id', TicketController.getById);
 router.post('/:id/messages', messageLimiter, validate(replyTicketSchema), TicketController.reply);

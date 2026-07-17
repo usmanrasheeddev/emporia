@@ -35,6 +35,7 @@ router.delete('/warehouses/:id', authorize(UserRole.ADMIN, UserRole.SUPER_ADMIN)
 
 router.get('/stock/:variantId', authorize(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.WAREHOUSE_MANAGER), InventoryController.getStockForVariant);
 router.patch('/stock/:variantId/:warehouseId', authorize(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.WAREHOUSE_MANAGER), validate(updateStockSchema), InventoryController.updateStock);
+router.get('/low-stock', authorize(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.WAREHOUSE_MANAGER), InventoryController.getLowStockAlerts);
 
 // ─── Stock Transfers ─────────────────────────────────────────
 

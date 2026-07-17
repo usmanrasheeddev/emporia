@@ -85,4 +85,9 @@ export class InventoryController {
     const transfer = await service.updateTransferStatus(id, status, req.user!.id);
     res.json(ApiResponse.success('Transfer status updated successfully', transfer));
   });
+
+  static getLowStockAlerts = asyncHandler(async (req: Request, res: Response) => {
+    const { items, meta } = await service.getLowStockAlerts(req.query);
+    res.json(ApiResponse.success('Low stock alerts retrieved successfully', items, 200, meta));
+  });
 }

@@ -345,4 +345,16 @@ export class InventoryService {
       return updatedTransfer;
     });
   }
+
+  async getLowStockAlerts(query: { page?: string; limit?: string }) {
+    const page = parseInt(query.page || '1', 10);
+    const limit = parseInt(query.limit || '10', 10);
+
+    const { items, total } = await this.repo.findLowStockAlerts(page, limit);
+
+    return {
+      items,
+      meta: buildPaginationMeta(total, page, limit),
+    };
+  }
 }
