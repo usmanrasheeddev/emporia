@@ -89,6 +89,11 @@ export const Header: React.FC = () => {
 
           {isAuthenticated && user ? (
             <div className={styles.userProfile}>
+              {(user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') && (
+                <Link href="/admin" style={{ marginRight: '16px', fontSize: '14px', textDecoration: 'none', color: 'var(--color-primary)', fontWeight: 500 }}>
+                  Admin Portal
+                </Link>
+              )}
               <Link href="/dashboard" aria-label="User Dashboard">
                 <Avatar
                   fallback={`${(user?.firstName || '')[0] || ''}${(user?.lastName || '')[0] || ''}`}
