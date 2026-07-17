@@ -42,3 +42,25 @@ export const uploadLimiter = rateLimit({
     next(ApiError.tooManyRequests('Upload limit reached, please try again later'));
   },
 });
+
+/** Limit rate of support ticket creation to prevent spam (max 5 per hour) */
+export const supportLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res, next) => {
+    next(ApiError.tooManyRequests('Too many support tickets created, please try again in an hour'));
+  },
+});
+
+/** Limit rate of ticket messaging replies to prevent flood (max 30 per 15 minutes) */
+export const messageLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res, next) => {
+    next(ApiError.tooManyRequests('Too many replies sent, please try again in 15 minutes'));
+  },
+});

@@ -31,6 +31,7 @@ import couponRoutes from './modules/coupon/coupon.routes';
 import shippingRoutes from './modules/shipping/shipping.routes';
 import orderRoutes from './modules/order/order.routes';
 import paymentRoutes from './modules/payment/payment.routes';
+import ticketRoutes from './modules/support/ticket.routes';
 
 const app = express();
 
@@ -83,6 +84,7 @@ app.use('/api/v1/coupons', couponRoutes);
 app.use('/api/v1/shipping', shippingRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/payments', paymentRoutes);
+app.use('/api/v1/tickets', ticketRoutes);
 
 // Swagger API Documentation UI
 const swaggerOptions = {
