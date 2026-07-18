@@ -163,6 +163,37 @@ export class AuthService {
     };
   }
 
+  async createOAuthSession(userId: string, ipAddress?: string, userAgent?: string): Promise<any> {
+    const user = await this.repository.findUserById(userId);
+    if (!user) throw ApiError.notFound('User not found');
+
+    await this.repository.updateUser(user.id, { lastLoginAt: new Date() });
+
+    const sessionId = generateTokenId();
+    const payload = { userId: user.id, role: user.role, sessionId };
+
+    const accessToken = generateAccessToken(payload);
+    const jti = generateTokenId();
+    const refreshToken = generateRefreshToken({ ...payload, jti });
+
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
+
+    await this.repository.createSession({
+      userId: user.id,
+      token: sessionId,
+      refreshToken: jti,
+      ipAddress,
+      userAgent,
+      expiresAt,
+    });
+
+    return {
+      user,
+      tokens: { accessToken, refreshToken },
+    };
+  }
+
   async verifyTwoFactor(userId: string, token: string, code: string, ipAddress?: string, userAgent?: string): Promise<any> {
     const user = await this.repository.findUserById(userId);
     if (!user || !user.twoFactorSecret) {

@@ -108,4 +108,20 @@ export class AuthController {
   static me = asyncHandler(async (req: RequestWithUser, res: Response): Promise<void> => {
     res.status(200).json(ApiResponse.success('Current user profile retrieved', { user: req.user }));
   });
+
+  static oauthCallback = asyncHandler(async (req: any, res: Response): Promise<void> => {
+    if (!req.user) {
+      res.redirect(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?error=oauth_failed`);
+      return;
+    }
+
+    const ipAddress = getClientIp(req);
+    const userAgent = parseUserAgent(req);
+
+    const result = await authService.createOAuthSession(req.user.id, ipAddress, userAgent);
+
+    res.redirect(
+      `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?token=${result.tokens.accessToken}&refreshToken=${result.tokens.refreshToken}`
+    );
+  });
 }
