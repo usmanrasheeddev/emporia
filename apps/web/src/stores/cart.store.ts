@@ -60,9 +60,9 @@ export const useCartStore = create<CartState>((set) => ({
         quantity,
       });
       set({ ...applyCartData(response.data), isLoading: false });
-    } catch (error) {
+    } catch (error: any) {
       set({ isLoading: false });
-      if (error instanceof ApiClientError) {
+      if (error instanceof ApiClientError || (error && error.name === 'ApiClientError')) {
         throw error;
       }
       throw new Error('Failed to add item to cart.');
@@ -77,9 +77,9 @@ export const useCartStore = create<CartState>((set) => ({
         { quantity },
       );
       set({ ...applyCartData(response.data), isLoading: false });
-    } catch (error) {
+    } catch (error: any) {
       set({ isLoading: false });
-      if (error instanceof ApiClientError) {
+      if (error instanceof ApiClientError || (error && error.name === 'ApiClientError')) {
         throw error;
       }
       throw new Error('Failed to update cart item.');
@@ -93,9 +93,9 @@ export const useCartStore = create<CartState>((set) => ({
         `/cart/items/${itemId}`,
       );
       set({ ...applyCartData(response.data), isLoading: false });
-    } catch (error) {
+    } catch (error: any) {
       set({ isLoading: false });
-      if (error instanceof ApiClientError) {
+      if (error instanceof ApiClientError || (error && error.name === 'ApiClientError')) {
         throw error;
       }
       throw new Error('Failed to remove cart item.');
@@ -115,9 +115,9 @@ export const useCartStore = create<CartState>((set) => ({
         coupon: null,
         isLoading: false,
       });
-    } catch (error) {
+    } catch (error: any) {
       set({ isLoading: false });
-      if (error instanceof ApiClientError) {
+      if (error instanceof ApiClientError || (error && error.name === 'ApiClientError')) {
         throw error;
       }
       throw new Error('Failed to clear cart.');
@@ -132,9 +132,9 @@ export const useCartStore = create<CartState>((set) => ({
         { code },
       );
       set({ ...applyCartData(response.data), isLoading: false });
-    } catch (error) {
+    } catch (error: any) {
       set({ isLoading: false });
-      if (error instanceof ApiClientError) {
+      if (error instanceof ApiClientError || (error && error.name === 'ApiClientError')) {
         throw error;
       }
       throw new Error('Failed to apply coupon.');
@@ -146,9 +146,9 @@ export const useCartStore = create<CartState>((set) => ({
     try {
       const response = await api.delete<ApiResponse<CartSummary>>('/cart/coupon');
       set({ ...applyCartData(response.data), isLoading: false });
-    } catch (error) {
+    } catch (error: any) {
       set({ isLoading: false });
-      if (error instanceof ApiClientError) {
+      if (error instanceof ApiClientError || (error && error.name === 'ApiClientError')) {
         throw error;
       }
       throw new Error('Failed to remove coupon.');

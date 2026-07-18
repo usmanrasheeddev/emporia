@@ -62,9 +62,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         isAuthenticated: true,
         isLoading: false,
       });
-    } catch (error) {
+    } catch (error: any) {
       set({ isLoading: false });
-      if (error instanceof ApiClientError) {
+      if (error instanceof ApiClientError || (error && error.name === 'ApiClientError')) {
         throw error;
       }
       throw new Error('An unexpected error occurred during login.');
@@ -79,9 +79,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         data,
       );
       set({ isLoading: false });
-    } catch (error) {
+    } catch (error: any) {
       set({ isLoading: false });
-      if (error instanceof ApiClientError) {
+      if (error instanceof ApiClientError || (error && error.name === 'ApiClientError')) {
         throw error;
       }
       throw new Error('An unexpected error occurred during registration.');
