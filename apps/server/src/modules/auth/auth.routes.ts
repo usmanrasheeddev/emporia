@@ -23,11 +23,37 @@ import {
 const router = Router();
 
 // ─── OAuth Authentication ────────────────────────────────────
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?error=oauth_failed`, session: false }), AuthController.oauthCallback);
+router.get('/google', (req, res, next) => {
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    res.status(400).json({ success: false, message: 'Google OAuth is not configured on this server.' });
+  } else {
+    passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
+  }
+});
 
-router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
-router.get('/github/callback', passport.authenticate('github', { failureRedirect: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?error=oauth_failed`, session: false }), AuthController.oauthCallback);
+router.get('/google/callback', (req, res, next) => {
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    res.status(400).json({ success: false, message: 'Google OAuth is not configured on this server.' });
+  } else {
+    passport.authenticate('google', { failureRedirect: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?error=oauth_failed`, session: false })(req, res, next);
+  }
+}, AuthController.oauthCallback);
+
+router.get('/github', (req, res, next) => {
+  if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+    res.status(400).json({ success: false, message: 'GitHub OAuth is not configured on this server.' });
+  } else {
+    passport.authenticate('github', { scope: ['user:email'] })(req, res, next);
+  }
+});
+
+router.get('/github/callback', (req, res, next) => {
+  if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+    res.status(400).json({ success: false, message: 'GitHub OAuth is not configured on this server.' });
+  } else {
+    passport.authenticate('github', { failureRedirect: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?error=oauth_failed`, session: false })(req, res, next);
+  }
+}, AuthController.oauthCallback);
 
 router.post('/register', validate(registerSchema), AuthController.register);
 router.post('/login', authLimiter, validate(loginSchema), AuthController.login);
