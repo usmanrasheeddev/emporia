@@ -10,6 +10,7 @@ import { stripe } from '../../config/stripe';
 import { createPayPalOrder, capturePayPalOrder } from '../../config/paypal';
 import { PaymentStatus, PaymentProvider, WalletTransactionType, ORDER_TRANSITIONS } from '@nexastore/shared';
 import { buildPaginationMeta } from '../../utils/pagination';
+import { env } from '../../config/env';
 
 export class PaymentService {
   private repo: PaymentRepository;
@@ -30,7 +31,7 @@ export class PaymentService {
     if (order.userId !== userId) throw ApiError.forbidden('Unauthorized access');
     if (order.paymentStatus === 'COMPLETED') throw ApiError.badRequest('Order is already paid');
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const appUrl = env.NEXT_PUBLIC_APP_URL;
 
     // Map checkout items for Stripe line items
     const lineItems = order.items.map((item) => ({
@@ -361,7 +362,7 @@ export class PaymentService {
       wallet = await this.repo.createWallet(userId);
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const appUrl = env.NEXT_PUBLIC_APP_URL;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

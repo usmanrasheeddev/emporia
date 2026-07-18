@@ -12,6 +12,7 @@ import { generateAccessToken, generateRefreshToken, verifyRefreshToken, generate
 import { sendEmail } from '../../config/mailer';
 import { addToBlacklist } from '../../config/redis';
 import { logger } from '../../utils/logger';
+import { env } from '../../config/env';
 import { VerificationTokenType, AuthTokens, AuthResponse, UserRole } from '@nexastore/shared';
 import speakeasy from 'speakeasy';
 import qrcode from 'qrcode';
@@ -64,7 +65,7 @@ export class AuthService {
     });
 
     // Send Welcome & Verification Email
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const appUrl = env.NEXT_PUBLIC_APP_URL;
     await sendEmail({
       to: user.email,
       subject: 'Welcome to NexaStore! Verify your email',
@@ -336,7 +337,7 @@ export class AuthService {
       expiresAt,
     });
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const appUrl = env.NEXT_PUBLIC_APP_URL;
     await sendEmail({
       to: user.email,
       subject: 'Reset Your NexaStore Password',

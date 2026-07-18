@@ -9,6 +9,7 @@ import { AuthController } from './auth.controller';
 import { validate } from '../../middleware/validate.middleware';
 import { authenticate } from '../../middleware/auth.middleware';
 import { authLimiter } from '../../middleware/rate-limit.middleware';
+import { env } from '../../config/env';
 import {
   registerSchema,
   loginSchema,
@@ -35,7 +36,7 @@ router.get('/google/callback', (req, res, next) => {
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     res.status(400).json({ success: false, message: 'Google OAuth is not configured on this server.' });
   } else {
-    passport.authenticate('google', { failureRedirect: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?error=oauth_failed`, session: false })(req, res, next);
+    passport.authenticate('google', { failureRedirect: `${env.NEXT_PUBLIC_APP_URL}/login?error=oauth_failed`, session: false })(req, res, next);
   }
 }, AuthController.oauthCallback);
 
@@ -51,7 +52,7 @@ router.get('/github/callback', (req, res, next) => {
   if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
     res.status(400).json({ success: false, message: 'GitHub OAuth is not configured on this server.' });
   } else {
-    passport.authenticate('github', { failureRedirect: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?error=oauth_failed`, session: false })(req, res, next);
+    passport.authenticate('github', { failureRedirect: `${env.NEXT_PUBLIC_APP_URL}/login?error=oauth_failed`, session: false })(req, res, next);
   }
 }, AuthController.oauthCallback);
 

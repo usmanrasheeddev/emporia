@@ -9,6 +9,7 @@ import { prisma } from '../../config/database';
 import { buildPaginationMeta } from '../../utils/pagination';
 import { sendEmail } from '../../config/mailer';
 import { generateOrderNumber, generateInvoiceNumber } from '../../utils/helpers';
+import { env } from '../../config/env';
 import { OrderStatus, PaymentStatus, ORDER_TRANSITIONS, InventoryLogType } from '@nexastore/shared';
 
 export class OrderService {
@@ -183,7 +184,7 @@ export class OrderService {
     // 6. Send Order Confirmation Email
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (user) {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      const appUrl = env.NEXT_PUBLIC_APP_URL;
       await sendEmail({
         to: user.email,
         subject: `Order Confirmation #${orderNumber}`,

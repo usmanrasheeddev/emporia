@@ -10,6 +10,7 @@ import { ApiResponse } from '../../utils/api-response';
 import { asyncHandler } from '../../utils/async-handler';
 import { getClientIp, parseUserAgent } from '../../utils/helpers';
 import { RequestWithUser } from '../../types';
+import { env } from '../../config/env';
 
 const repository = new AuthRepository();
 const authService = new AuthService(repository);
@@ -111,7 +112,7 @@ export class AuthController {
 
   static oauthCallback = asyncHandler(async (req: any, res: Response): Promise<void> => {
     if (!req.user) {
-      res.redirect(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?error=oauth_failed`);
+      res.redirect(`${env.CORS_ORIGIN}/login?error=oauth_failed`);
       return;
     }
 
@@ -121,7 +122,7 @@ export class AuthController {
     const result = await authService.createOAuthSession(req.user.id, ipAddress, userAgent);
 
     res.redirect(
-      `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login?token=${result.tokens.accessToken}&refreshToken=${result.tokens.refreshToken}`
+      `${env.CORS_ORIGIN}/login?token=${result.tokens.accessToken}&refreshToken=${result.tokens.refreshToken}`
     );
   });
 }
