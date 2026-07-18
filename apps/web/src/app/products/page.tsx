@@ -48,7 +48,7 @@ function ProductsCatalog() {
   // ─── Query Categories & Brands for filters ────────────────────
   const { data: categories } = useQuery({
     queryKey: ['categories-list'],
-    queryFn: () => api.get<any[]>('/categories/tree'),
+    queryFn: () => api.get<any>('/categories/tree'),
   });
 
   const { data: brands } = useQuery({
@@ -73,8 +73,11 @@ function ProductsCatalog() {
     queryFn: () => api.get<any>(`/search?${queryParams.toString()}`),
   });
 
-  const products = catalogData?.products || [];
+  const products = catalogData?.data?.products || [];
   const meta = catalogData?.meta || { page: 1, limit: 12, total: 0, totalPages: 1 };
+  
+  const categoryList = categories?.data || [];
+  const brandList = brands?.data || [];
 
   // ─── Filter Actions ──────────────────────────────────────────
   const updateFilters = (updates: Record<string, string | null>) => {
@@ -125,7 +128,7 @@ function ProductsCatalog() {
             >
               All Categories
             </button>
-            {categories?.map((cat: any) => (
+            {categoryList?.map((cat: any) => (
               <button
                 key={cat.id}
                 onClick={() => updateFilters({ category: cat.slug })}
@@ -147,7 +150,7 @@ function ProductsCatalog() {
             >
               All Brands
             </button>
-            {brands?.brands?.map((b: any) => (
+            {brandList?.map((b: any) => (
               <button
                 key={b.id}
                 onClick={() => updateFilters({ brand: b.slug })}

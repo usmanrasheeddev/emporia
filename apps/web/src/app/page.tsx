@@ -22,7 +22,7 @@ export default function HomePage() {
   // Fetch featured categories
   const { data: categoriesData, isLoading: categoriesLoading } = useQuery({
     queryKey: ['categories-featured'],
-    queryFn: () => api.get<any[]>('/categories/tree'),
+    queryFn: () => api.get<any>('/categories/tree'),
   });
 
   // Fetch featured products
@@ -31,7 +31,7 @@ export default function HomePage() {
     queryFn: () => api.get<any>('/products?isFeatured=true&limit=8'),
   });
 
-  const featuredCategories = categoriesData?.slice(0, 6) || [];
+  const featuredCategories = categoriesData?.data?.slice(0, 6) || [];
   const featuredProducts = productsData?.data || [];
 
   return (
