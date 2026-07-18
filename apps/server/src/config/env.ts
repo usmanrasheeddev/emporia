@@ -24,10 +24,10 @@ const envSchema = z.object({
   // OAuth
   GOOGLE_CLIENT_ID: z.string().default(''),
   GOOGLE_CLIENT_SECRET: z.string().default(''),
-  GOOGLE_CALLBACK_URL: z.string().default('http://localhost:5000/api/v1/auth/google/callback'),
+  GOOGLE_CALLBACK_URL: z.string().default('https://nexastoreserver-production.up.railway.app/api/v1/auth/google/callback'),
   GITHUB_CLIENT_ID: z.string().default(''),
   GITHUB_CLIENT_SECRET: z.string().default(''),
-  GITHUB_CALLBACK_URL: z.string().default('http://localhost:5000/api/v1/auth/github/callback'),
+  GITHUB_CALLBACK_URL: z.string().default('https://nexastoreserver-production.up.railway.app/api/v1/auth/github/callback'),
 
   // Payments
   STRIPE_SECRET_KEY: z.string().default(''),
@@ -52,8 +52,8 @@ const envSchema = z.object({
   // App
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().min(1000).max(65535).default(5000),
-  CORS_ORIGIN: z.string().default('http://localhost:3000'),
-  NEXT_PUBLIC_APP_URL: z.string().default('http://localhost:3000'),
+  CORS_ORIGIN: z.string().default('https://emporia-web-rouge.vercel.app'),
+  NEXT_PUBLIC_APP_URL: z.string().default('https://emporia-web-rouge.vercel.app'),
 });
 
 /** Parse and validate environment variables at startup */

@@ -97,6 +97,10 @@ const swaggerOptions = {
     },
     servers: [
       {
+        url: 'https://nexastoreserver-production.up.railway.app/api/v1',
+        description: 'Production server',
+      },
+      {
         url: 'http://localhost:5000/api/v1',
         description: 'Development server',
       },

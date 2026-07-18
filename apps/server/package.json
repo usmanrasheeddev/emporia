@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "tsc && node -e \"const fs = require('fs'); const path = require('path'); fs.mkdirSync('dist/templates', { recursive: true }); fs.readdirSync('src/templates').forEach(file => fs.copyFileSync(path.join('src/templates', file), path.join('dist/templates', file)))\"",
     "start": "node dist/server.js",
     "lint": "echo \"No lint configuration for server package\"",
     "typecheck": "tsc --noEmit",
