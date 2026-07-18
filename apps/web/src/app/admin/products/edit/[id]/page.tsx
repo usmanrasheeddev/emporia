@@ -16,7 +16,7 @@ import { Select } from '@/components/ui/Select/Select';
 import { Textarea } from '@/components/ui/Textarea/Textarea';
 import { Alert } from '@/components/ui/Alert/Alert';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
-import styles from '../../new/products.module.css';
+import styles from '../../../products.module.css';
 
 export default function AdminEditProductPage() {
   const router = useRouter();
