@@ -105,9 +105,14 @@ export const Header: React.FC = () => {
               </button>
             </div>
           ) : (
-            <Link href="/login" className={styles.loginLink}>
-              Login
-            </Link>
+            <div className={styles.authButtons} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <Link href="/login" className={styles.loginLink}>
+                Login
+              </Link>
+              <Link href="/register" className={styles.loginLink} style={{ backgroundColor: 'var(--color-primary, #000)', color: '#fff', padding: '6px 14px', borderRadius: '6px', textDecoration: 'none' }}>
+                Register
+              </Link>
+            </div>
           )}
         </div>
       </div>
