@@ -142,26 +142,43 @@ export class PaymentService {
         .filter((x, idx) => idx < lineItems.length - (shippingCents > 0 ? 1 : 0) - (taxCents > 0 ? 1 : 0) && x.item.quantity === 1)
         .sort((a, b) => b.totalVal - a.totalVal);
 
-      if (productSingleQtyIndices.length > 0) {
-        const target = productSingleQtyIndices[0];
-        const newUnitAmount = target.item.price_data.unit_amount + pennyDelta;
-        if (newUnitAmount >= 0) {
-          target.item.price_data.unit_amount = newUnitAmount;
-          pennyDelta = 0;
-        }
-      }
+      // Distribute pennyDelta step-by-step until pennyDelta === 0
+      while (pennyDelta !== 0) {
+        let adjustedInLoop = false;
 
-      // Fallback: If no single-qty item was found or adjusted, distribute to highest value line item safely
-      if (pennyDelta !== 0) {
-        const highestValIdx = lineItems
-          .map((item, idx) => ({ idx, val: item.price_data.unit_amount * item.quantity }))
-          .sort((a, b) => b.val - a.val)[0]?.idx ?? 0;
-
-        const targetItem = lineItems[highestValIdx];
-        const newUnitAmount = targetItem.price_data.unit_amount + (pennyDelta > 0 ? 1 : -1);
-        if (newUnitAmount >= 0) {
-          targetItem.price_data.unit_amount = newUnitAmount;
+        // Try single-qty product items first
+        for (const target of productSingleQtyIndices) {
+          if (pennyDelta === 0) break;
+          const step = pennyDelta > 0 ? 1 : -1;
+          const newUnitAmount = target.item.price_data.unit_amount + step;
+          if (newUnitAmount >= 0) {
+            target.item.price_data.unit_amount = newUnitAmount;
+            pennyDelta -= step;
+            adjustedInLoop = true;
+          }
         }
+
+        if (pennyDelta === 0) break;
+
+        // Fallback: loop through all product items from highest to lowest value
+        const sortedProductItems = lineItems
+          .map((item, idx) => ({ item, val: item.price_data.unit_amount * item.quantity }))
+          .filter((_, idx) => idx < lineItems.length - (shippingCents > 0 ? 1 : 0) - (taxCents > 0 ? 1 : 0))
+          .sort((a, b) => b.val - a.val);
+
+        for (const entry of sortedProductItems) {
+          if (pennyDelta === 0) break;
+          const step = pennyDelta > 0 ? 1 : -1;
+          const newUnitAmount = entry.item.price_data.unit_amount + step;
+          if (newUnitAmount >= 0) {
+            entry.item.price_data.unit_amount = newUnitAmount;
+            pennyDelta -= step * entry.item.quantity;
+            adjustedInLoop = true;
+          }
+        }
+
+        // Emergency break if no further non-negative adjustment can be made
+        if (!adjustedInLoop) break;
       }
     }
 
