@@ -33,51 +33,80 @@ export class PaymentService {
 
     const appUrl = env.NEXT_PUBLIC_APP_URL;
 
-    // Map checkout items for Stripe line items
-    const lineItems = order.items.map((item) => ({
-      price_data: {
-        currency: 'usd',
-        product_data: {
-          name: item.name,
-        },
-        unit_amount: Math.round(Number(item.price) * 100), // in cents
-      },
-      quantity: item.quantity,
-    }));
+    const discountAmount = Number(order.discountAmount || 0);
+    const shippingAmount = Number(order.shippingAmount || 0);
+    const taxAmount = Number(order.taxAmount || 0);
+    const expectedTotalCents = Math.round(Number(order.totalAmount) * 100);
 
-    // Add tax and shipping charges as lines if positive
-    if (Number(order.shippingAmount) > 0) {
+    // Calculate raw items subtotal in cents
+    const rawItemsSubtotalCents = order.items.reduce(
+      (acc, item) => acc + Math.round(Number(item.price) * 100) * item.quantity,
+      0
+    );
+
+    const discountCents = Math.round(discountAmount * 100);
+
+    // Map line items with proportional net price allocation if discount is present
+    const lineItems = order.items.map((item) => {
+      const itemSubtotalCents = Math.round(Number(item.price) * 100) * item.quantity;
+      let allocatedDiscountCents = 0;
+
+      if (discountCents > 0 && rawItemsSubtotalCents > 0) {
+        allocatedDiscountCents = Math.round((itemSubtotalCents / rawItemsSubtotalCents) * discountCents);
+      }
+
+      const netItemSubtotalCents = Math.max(0, itemSubtotalCents - allocatedDiscountCents);
+      const unitAmountCents = Math.round(netItemSubtotalCents / item.quantity);
+
+      return {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: item.name,
+            ...(order.couponCode ? { description: `Discount applied (${order.couponCode})` } : {}),
+          },
+          unit_amount: unitAmountCents,
+        },
+        quantity: item.quantity,
+      };
+    });
+
+    const shippingCents = Math.round(shippingAmount * 100);
+    const taxCents = Math.round(taxAmount * 100);
+
+    // Add shipping charges as lines if positive
+    if (shippingCents > 0) {
       lineItems.push({
         price_data: {
           currency: 'usd',
           product_data: { name: 'Shipping Charges' },
-          unit_amount: Math.round(Number(order.shippingAmount) * 100),
+          unit_amount: shippingCents,
         },
         quantity: 1,
       });
     }
 
-    if (Number(order.taxAmount) > 0) {
+    // Add sales tax as lines if positive
+    if (taxCents > 0) {
       lineItems.push({
         price_data: {
           currency: 'usd',
           product_data: { name: 'Estimated Sales Tax' },
-          unit_amount: Math.round(Number(order.taxAmount) * 100),
+          unit_amount: taxCents,
         },
         quantity: 1,
       });
     }
 
-    // Apply discount as negative item if present (or Stripe coupons, this is simple and works)
-    if (Number(order.discountAmount) > 0) {
-      lineItems.push({
-        price_data: {
-          currency: 'usd',
-          product_data: { name: 'Coupon Discount' },
-          unit_amount: -Math.round(Number(order.discountAmount) * 100),
-        },
-        quantity: 1,
-      });
+    // ─── Penny-Adjustment Distribution Guard ───────────────────
+    const calculatedTotalCents = lineItems.reduce(
+      (sum, item) => sum + item.price_data.unit_amount * item.quantity,
+      0
+    );
+
+    const pennyDelta = expectedTotalCents - calculatedTotalCents;
+    if (pennyDelta !== 0 && lineItems.length > 0) {
+      lineItems[0].price_data.unit_amount += pennyDelta;
     }
 
     const session = await stripe.checkout.sessions.create({
