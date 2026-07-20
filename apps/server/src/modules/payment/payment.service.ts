@@ -38,43 +38,73 @@ export class PaymentService {
     const taxAmount = Number(order.taxAmount || 0);
     const expectedTotalCents = Math.round(Number(order.totalAmount) * 100);
 
+    const discountCents = Math.round(discountAmount * 100);
+    const shippingCents = Math.round(shippingAmount * 100);
+    const taxCents = Math.round(taxAmount * 100);
+
     // Calculate raw items subtotal in cents
     const rawItemsSubtotalCents = order.items.reduce(
       (acc, item) => acc + Math.round(Number(item.price) * 100) * item.quantity,
       0
     );
 
-    const discountCents = Math.round(discountAmount * 100);
+    // Step 1: Map line items with net subtotal allocation and handle quantity > 1 remainders
+    const lineItems: Array<{
+      price_data: { currency: string; product_data: { name: string; description?: string }; unit_amount: number };
+      quantity: number;
+    }> = [];
 
-    // Map line items with proportional net price allocation if discount is present
-    const lineItems = order.items.map((item) => {
+    order.items.forEach((item) => {
       const itemSubtotalCents = Math.round(Number(item.price) * 100) * item.quantity;
       let allocatedDiscountCents = 0;
 
       if (discountCents > 0 && rawItemsSubtotalCents > 0) {
-        allocatedDiscountCents = Math.round((itemSubtotalCents / rawItemsSubtotalCents) * discountCents);
+        allocatedDiscountCents = Math.min(
+          itemSubtotalCents,
+          Math.round((itemSubtotalCents / rawItemsSubtotalCents) * discountCents)
+        );
       }
 
       const netItemSubtotalCents = Math.max(0, itemSubtotalCents - allocatedDiscountCents);
-      const unitAmountCents = Math.round(netItemSubtotalCents / item.quantity);
+      const baseUnitAmountCents = item.quantity > 0 ? Math.floor(netItemSubtotalCents / item.quantity) : 0;
+      const remainderCents = netItemSubtotalCents - baseUnitAmountCents * item.quantity;
 
-      return {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: item.name,
-            ...(order.couponCode ? { description: `Discount applied (${order.couponCode})` } : {}),
+      const desc = order.couponCode ? `Discount applied (${order.couponCode})` : undefined;
+
+      if (remainderCents > 0 && remainderCents < item.quantity) {
+        // Split item to preserve exact net item subtotal integer matching
+        const baseQty = item.quantity - remainderCents;
+        if (baseQty > 0) {
+          lineItems.push({
+            price_data: {
+              currency: 'usd',
+              product_data: { name: item.name, ...(desc ? { description: desc } : {}) },
+              unit_amount: baseUnitAmountCents,
+            },
+            quantity: baseQty,
+          });
+        }
+        lineItems.push({
+          price_data: {
+            currency: 'usd',
+            product_data: { name: item.name, ...(desc ? { description: desc } : {}) },
+            unit_amount: baseUnitAmountCents + 1,
           },
-          unit_amount: unitAmountCents,
-        },
-        quantity: item.quantity,
-      };
+          quantity: remainderCents,
+        });
+      } else {
+        lineItems.push({
+          price_data: {
+            currency: 'usd',
+            product_data: { name: item.name, ...(desc ? { description: desc } : {}) },
+            unit_amount: baseUnitAmountCents,
+          },
+          quantity: item.quantity,
+        });
+      }
     });
 
-    const shippingCents = Math.round(shippingAmount * 100);
-    const taxCents = Math.round(taxAmount * 100);
-
-    // Add shipping charges as lines if positive
+    // Step 2: Add shipping and tax lines if positive
     if (shippingCents > 0) {
       lineItems.push({
         price_data: {
@@ -86,7 +116,6 @@ export class PaymentService {
       });
     }
 
-    // Add sales tax as lines if positive
     if (taxCents > 0) {
       lineItems.push({
         price_data: {
@@ -98,15 +127,42 @@ export class PaymentService {
       });
     }
 
-    // ─── Penny-Adjustment Distribution Guard ───────────────────
-    const calculatedTotalCents = lineItems.reduce(
+    // Step 3: Hardened Safe Penny Adjustment Distribution
+    let calculatedTotalCents = lineItems.reduce(
       (sum, item) => sum + item.price_data.unit_amount * item.quantity,
       0
     );
 
-    const pennyDelta = expectedTotalCents - calculatedTotalCents;
+    let pennyDelta = expectedTotalCents - calculatedTotalCents;
+
     if (pennyDelta !== 0 && lineItems.length > 0) {
-      lineItems[0].price_data.unit_amount += pennyDelta;
+      // Find candidate line items with quantity == 1 for safe penny adjustment without multiplier effect
+      const productSingleQtyIndices = lineItems
+        .map((item, idx) => ({ idx, item, totalVal: item.price_data.unit_amount * item.quantity }))
+        .filter((x, idx) => idx < lineItems.length - (shippingCents > 0 ? 1 : 0) - (taxCents > 0 ? 1 : 0) && x.item.quantity === 1)
+        .sort((a, b) => b.totalVal - a.totalVal);
+
+      if (productSingleQtyIndices.length > 0) {
+        const target = productSingleQtyIndices[0];
+        const newUnitAmount = target.item.price_data.unit_amount + pennyDelta;
+        if (newUnitAmount >= 0) {
+          target.item.price_data.unit_amount = newUnitAmount;
+          pennyDelta = 0;
+        }
+      }
+
+      // Fallback: If no single-qty item was found or adjusted, distribute to highest value line item safely
+      if (pennyDelta !== 0) {
+        const highestValIdx = lineItems
+          .map((item, idx) => ({ idx, val: item.price_data.unit_amount * item.quantity }))
+          .sort((a, b) => b.val - a.val)[0]?.idx ?? 0;
+
+        const targetItem = lineItems[highestValIdx];
+        const newUnitAmount = targetItem.price_data.unit_amount + (pennyDelta > 0 ? 1 : -1);
+        if (newUnitAmount >= 0) {
+          targetItem.price_data.unit_amount = newUnitAmount;
+        }
+      }
     }
 
     const session = await stripe.checkout.sessions.create({
