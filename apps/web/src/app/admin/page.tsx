@@ -23,7 +23,7 @@ export default function AdminAnalyticsPage() {
   // Fetch daily transactions history
   const { data: dailyResponse, isLoading: dailyLoading } = useQuery({
     queryKey: ['admin-daily-analytics'],
-    queryFn: () => api.get<any[]>('/orders/dashboard/daily'),
+    queryFn: () => api.get<any>('/orders/dashboard/daily'),
   });
 
   const stats = statsResponse?.data || {
@@ -33,7 +33,7 @@ export default function AdminAnalyticsPage() {
     totalProducts: 0,
   };
 
-  const dailyRecords = dailyResponse || [];
+  const dailyRecords = dailyResponse?.data || [];
 
   return (
     <div className={styles.container}>

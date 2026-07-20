@@ -68,6 +68,7 @@ router.post('/verify-email', validate(verifyEmailSchema), AuthController.verifyE
 router.post('/forgot-password', authLimiter, validate(forgotPasswordSchema), AuthController.forgotPassword);
 router.post('/reset-password', validate(resetPasswordSchema), AuthController.resetPassword);
 router.post('/verify-otp', validate(verifyOTPSchema), AuthController.verifyOTP);
+router.post('/resend-verify', AuthController.resendVerifyOTP);
 
 router.post('/2fa/setup', authenticate, AuthController.setupTwoFactor);
 router.post('/2fa/enable', authenticate, AuthController.enableTwoFactor);

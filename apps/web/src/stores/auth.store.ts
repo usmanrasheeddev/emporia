@@ -1,8 +1,6 @@
 import { create } from 'zustand';
-import { api, ApiClientError } from '@/lib/api';
+import { api, ApiClientError, TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/lib/api';
 import type { User, ApiResponse } from '@/types';
-
-const TOKEN_KEY = 'auth_token';
 
 interface AuthCredentials {
   email: string;
@@ -56,6 +54,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       const token = tokens.accessToken;
 
       localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
       set({
         user,
         token,
@@ -90,6 +89,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: () => {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
     set({
       user: null,
       token: null,

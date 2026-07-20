@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { useCartStore } from '@/stores/cart.store';
+import { useAuthStore } from '@/stores/auth.store';
 import { Card } from '@/components/ui/Card/Card';
 import { Button } from '@/components/ui/Button/Button';
 import { Alert } from '@/components/ui/Alert/Alert';
@@ -19,12 +20,20 @@ import styles from './checkout.module.css';
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
   const { items, subtotal, discountAmount, fetchCart } = useCartStore();
 
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [selectedMethodId, setSelectedMethodId] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'STRIPE' | 'PAYPAL' | 'COD' | 'WALLET'>('COD');
   const [error, setError] = useState<string | null>(null);
+
+  // Auth guard — redirect to login if not authenticated
+  useEffect(() => {
+    if (isAuthenticated === false) {
+      router.replace('/login?redirect=/checkout');
+    }
+  }, [isAuthenticated, router]);
 
   useEffect(() => {
     fetchCart();
@@ -33,10 +42,11 @@ export default function CheckoutPage() {
   // Fetch customer address list
   const { data: addressResponse, isLoading: addressLoading } = useQuery({
     queryKey: ['my-addresses'],
-    queryFn: () => api.get<any[]>('/users/me/addresses'),
+    queryFn: () => api.get<any>('/users/me/addresses'),
+    enabled: isAuthenticated,
   });
 
-  const addresses = addressResponse || [];
+  const addresses = addressResponse?.data || [];
 
   // Set default address
   useEffect(() => {

@@ -73,9 +73,16 @@ export class AuthController {
   });
 
   static verifyOTP = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const { email, otp } = req.body;
-    const resetToken = await authService.verifyOTP(email, otp);
-    res.status(200).json(ApiResponse.success('OTP verified successfully', { token: resetToken }));
+    const { email, otp, type } = req.body;
+    const result = await authService.verifyOTP(email, otp, type || 'EMAIL_VERIFY');
+    const message = type === 'PASSWORD_RESET' ? 'OTP verified successfully' : 'Email verified successfully';
+    res.status(200).json(ApiResponse.success(message, type === 'PASSWORD_RESET' ? { token: result } : undefined));
+  });
+
+  static resendVerifyOTP = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { email } = req.body;
+    await authService.resendVerifyOTP(email);
+    res.status(200).json(ApiResponse.success('Verification code resent. Please check your email.'));
   });
 
   static setupTwoFactor = asyncHandler(async (req: RequestWithUser, res: Response): Promise<void> => {
@@ -107,7 +114,7 @@ export class AuthController {
   });
 
   static me = asyncHandler(async (req: RequestWithUser, res: Response): Promise<void> => {
-    res.status(200).json(ApiResponse.success('Current user profile retrieved', { user: req.user }));
+    res.status(200).json(ApiResponse.success('Current user profile retrieved', req.user));
   });
 
   static oauthCallback = asyncHandler(async (req: any, res: Response): Promise<void> => {

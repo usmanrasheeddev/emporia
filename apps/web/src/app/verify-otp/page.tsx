@@ -43,7 +43,7 @@ function VerifyOtpForm() {
 
     setIsLoading(true);
     try {
-      await api.post('/auth/verify-otp', { email, otp });
+      await api.post('/auth/verify-otp', { email, otp, type: 'EMAIL_VERIFY' });
       setSuccess('Email verified successfully! Redirecting to login...');
       setTimeout(() => {
         router.push('/login');
@@ -61,7 +61,7 @@ function VerifyOtpForm() {
     setIsLoading(true);
 
     try {
-      await api.post('/auth/forgot-password', { email });
+      await api.post('/auth/resend-verify', { email });
       setSuccess('A new verification OTP code has been sent to your email.');
     } catch (err: any) {
       setError(err.message || 'Failed to resend code. Please try again.');

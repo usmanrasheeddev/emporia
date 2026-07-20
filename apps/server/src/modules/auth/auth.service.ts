@@ -190,7 +190,14 @@ export class AuthService {
     });
 
     return {
-      user,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        avatar: user.avatar,
+      },
       tokens: { accessToken, refreshToken },
     };
   }
@@ -370,18 +377,64 @@ export class AuthService {
     await this.repository.deleteUserSessions(user.id);
   }
 
-  async verifyOTP(email: string, otp: string): Promise<string> {
+  async verifyOTP(email: string, otp: string, type: 'EMAIL_VERIFY' | 'PASSWORD_RESET' = 'EMAIL_VERIFY'): Promise<string> {
+    const tokenType = type === 'EMAIL_VERIFY'
+      ? VerificationTokenType.EMAIL_VERIFY
+      : VerificationTokenType.PASSWORD_RESET;
+
     const vToken = await this.repository.findVerificationTokenByEmailAndOtp(
       email,
       otp,
-      VerificationTokenType.PASSWORD_RESET
+      tokenType
     );
 
     if (!vToken || vToken.expiresAt < new Date()) {
       throw ApiError.badRequest('Invalid or expired OTP code');
     }
 
+    // If verifying email registration, mark user as verified
+    if (type === 'EMAIL_VERIFY') {
+      const user = await this.repository.findUserByEmail(email);
+      if (!user) throw ApiError.notFound('User not found');
+      await this.repository.updateUser(user.id, { isVerified: true });
+      await this.repository.deleteVerificationToken(vToken.id);
+      return 'verified';
+    }
+
     return vToken.token;
+  }
+
+  async resendVerifyOTP(email: string): Promise<void> {
+    const user = await this.repository.findUserByEmail(email);
+    if (!user) return; // Silently return to avoid enumeration
+
+    if (user.isVerified) {
+      throw ApiError.badRequest('Email is already verified');
+    }
+
+    const otp = generateOTP();
+    const token = generateTokenId();
+    const expiresAt = generateOTPExpiry();
+
+    await this.repository.createVerificationToken({
+      email: user.email,
+      token,
+      otp,
+      type: VerificationTokenType.EMAIL_VERIFY,
+      expiresAt,
+    });
+
+    const appUrl = env.NEXT_PUBLIC_APP_URL;
+    await sendEmail({
+      to: user.email,
+      subject: 'Your NexaStore Email Verification Code',
+      template: 'welcome',
+      data: {
+        name: user.firstName,
+        verificationUrl: `${appUrl}/verify-email?token=${token}`,
+        appUrl,
+      },
+    });
   }
 
   async setupTwoFactor(userId: string): Promise<{ secret: string; qrCodeUrl: string }> {

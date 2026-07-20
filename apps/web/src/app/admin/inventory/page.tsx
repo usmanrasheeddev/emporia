@@ -34,7 +34,7 @@ export default function AdminInventoryPage() {
   // Fetch warehouse list
   const { data: warehouses } = useQuery({
     queryKey: ['admin-warehouses'],
-    queryFn: () => api.get<any[]>('/inventory/warehouses'), // Mapped in server inventory.routes.ts
+    queryFn: () => api.get<any>('/inventory/warehouses'),
   });
 
   // Fetch low-stock alerts
@@ -43,7 +43,7 @@ export default function AdminInventoryPage() {
     queryFn: () => api.get<any>(`/inventory/low-stock?page=${page}&limit=10`),
   });
 
-  const alerts = alertsResponse?.items || [];
+  const alerts = alertsResponse?.data || [];
   const meta = alertsResponse?.meta || { page: 1, limit: 10, total: 0, totalPages: 1 };
 
   // Transfer Mutation
@@ -86,7 +86,7 @@ export default function AdminInventoryPage() {
   };
 
   const warehouseOptions =
-    warehouses?.map((w: any) => ({
+    warehouses?.data?.map((w: any) => ({
       value: w.id,
       label: `${w.name} (${w.code})`,
     })) || [];
