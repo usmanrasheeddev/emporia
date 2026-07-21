@@ -28,10 +28,10 @@ export const passwordSchema = z
   .regex(/\d/, 'Password must contain at least one number')
   .regex(/[@$!%*?&#^()_+\-=]/, 'Password must contain at least one special character');
 
-/** Phone number: E.164 format */
+/** Phone number: E.164 or national format (e.g. +923044993096 or 03044993096) */
 export const phoneSchema = z
   .string()
-  .regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format')
+  .regex(/^\+?[0-9\s\-()]{7,20}$/, 'Invalid phone number format')
   .optional()
   .or(z.literal(''));
 

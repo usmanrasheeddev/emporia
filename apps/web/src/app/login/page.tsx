@@ -54,7 +54,14 @@ function LoginForm() {
       const redirectTo = searchParams.get('redirect') || '/dashboard';
       router.push(redirectTo);
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please check your credentials.');
+      if (err?.errors && Array.isArray(err.errors) && err.errors.length > 0) {
+        const fieldErrors = err.errors
+          .map((e: any) => `${e.field ? e.field + ': ' : ''}${e.message}`)
+          .join(' | ');
+        setError(`Login Error: ${fieldErrors}`);
+      } else {
+        setError(err.message || 'Login failed. Please check your credentials.');
+      }
     }
   };
 

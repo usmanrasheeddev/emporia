@@ -45,7 +45,14 @@ export default function RegisterPage() {
         router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
       }, 1500);
     } catch (err: any) {
-      setError(err.message || 'Registration failed. Please check your details.');
+      if (err?.errors && Array.isArray(err.errors) && err.errors.length > 0) {
+        const fieldErrors = err.errors
+          .map((e: any) => `${e.field ? e.field + ': ' : ''}${e.message}`)
+          .join(' | ');
+        setError(`Validation Error: ${fieldErrors}`);
+      } else {
+        setError(err.message || 'Registration failed. Please check your details.');
+      }
     }
   };
 
